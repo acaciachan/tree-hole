@@ -1,0 +1,42 @@
+What Is The Perfect Clock For A Sugar Cane Farm?
+https://www.youtube.com/watch?v=um238ebnXOQ
+置顶评论(@YuuseiKurobane):
+The answer is: 49253 ticks, with the efficiency 36.006436594099256 sugarcane per tick for 1 million sugarcane
+Or, 2462.65 seconds / 41 minutes and 2.65 seconds
+
+(Explanation in comment reply)
+
+Here is the python code that I used:
+
+from scipy.stats import binom
+
+def efficiency(cycle_length):
+    n = 2
+    for i in range(0, 16):
+        n -= 2 * binom.pmf(i, cycle_length, 3/4096)
+    for i in range(16, 32):
+        n -= binom.pmf(i, cycle_length, 3/4096)
+    return n * 1000000 / cycle_length
+
+
+for i in range(49240, 49260):
+    print(i, efficiency(i))
+
+
+
+【MC】甘蔗的最佳收割间隔是多少？【 ilmango】(https://www.bilibili.com/video/av342247424/)
+
+转自https://youtu.be/um238ebnXOQ有能力请支持原作者
+作者：ilmango 发布时间：2022年6月1日 搬运：zhjzx
+视频摘要：芒果认为间隔41分钟最好，因为到41分钟后都差不多长到第三格了，而10分钟刚长到第二格，因为随即刻要随机到甘蔗16次才会长一格，10分钟就收一次的话可能会浪费掉随机的age，评论算出来是49253 刻，或者是41分2.65秒
+原简介翻译：找到了生命、宇。。。。额，甘蔗农场的最优间隔
+Grant Moyer 也给出了他的答案
+https://gist.github.com/GrantMoyer/6c44275c3ae13a2334cda22fdda2ae31
+
+耐久56的木镐(https://space.bilibili.com/14598618)的评论：准确来说最优解是49251刻，即41分2.55秒
+
+
+
+Sugar Cane Yield v.s. Harvest Period：sugarcane.ipynb
+https://gist.github.com/GrantMoyer/6c44275c3ae13a2334cda22fdda2ae31
+看不懂思密达
