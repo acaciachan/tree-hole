@@ -1,0 +1,20 @@
+res插件用于创建自己的领地，防止怪物和玩家的破坏。
+
+一、创建领地
+领地形状只能是长方体区域，使用[木锄头]左键和右键分别选择两个方块，用来决定你的领地长方体区域的两个顶点。
+/res create <xxx> '创建名为xxx的领地
+/res remove <xxx> '删除名为xxx的领地(不填领地名则默认所处的领地)
+/res rename [xxx] [yyy] '把领地xxx改名为yyy
+
+/res info <xxx> '查看领地xxx的信息(不填领地名则默认所处的领地)
+/res list [abc] '显示玩家abc所有的领地(不填领地名则列出自己的)
+
+/res tp <xxx> '传送到领地xxx
+/res tpset '设置领地xxx的传送位置(自己站的位置和朝向)
+
+/res set <xxx> '打开领地权限的设置面板(不填领地名则默认自己所处的领地)
+/res pset <xxx> [abc] '给abc设置当前领地的权限(不填领地名则默认自己所处的领地)
+/res pset <xxx> [abc] trusted true/false '完全信任/不信任玩家abc(给它领地内的所有权限)
+/res message <xxx> enter/leave [信息] '设置进入/退出某领地时候显示的信息
+
+/res mirror <xxx> <yyy> '复制领地xxx的权限设置到领地yyy

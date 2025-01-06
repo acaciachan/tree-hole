@@ -1,0 +1,89 @@
+/carpet language zh_cn
+/carpet accurateBlockPlacement true
+/carpet antiCheatDisabled true
+/carpet antiSpamDisabled true
+/carpet blockPlacementIgnoreEntity true
+/carpet blockStateSyncing true
+/carpet carpets true
+/carpet cleanLogs true
+/carpet commandManipulate ops
+/carpet creativeNetherWaterPlacement true
+/carpet creativeNoClip true
+/carpet creativeNoItemCooldown true
+/carpet creativeOpenContainerForcibly true
+/carpet ctrlQCraftingFix true
+/carpet defaultLoggers mobcaps,tps,tickWarp,lightQueue
+/carpet enchantCommandNoRestriction true
+/carpet entityPlacementIgnoreCollision true
+/carpet entityTrackerInterval 1
+/carpet explosionNoBlockDamage true
+/carpet fillLimit 20000000
+/carpet fillUpdates false
+/carpet flippinCactus true
+/carpet fluidDestructionDisabled true
+/carpet hopperCounters true
+/carpet hopperCountersUnlimitedSpeed true
+/carpet hopperNoItemCost true
+/carpet HUDLoggerUpdateInterval 1
+/carpet instantCommandBlock true
+/carpet largeBarrel true
+/carpet lightEngineMaxBatchSize 200
+/carpet lightQueueLoggerSamplingDuration 20
+/carpet persistentLoggerSubscription true
+/carpet placementRotationFix true
+/carpet portalCreativeDelay 20
+/carpet repeaterHalfDelay true
+/carpet stopCommandDoubleConfirmation true
+/carpet structureBlockDoNotPreserveFluid true
+/carpet structureBlockLimit 1024
+/carpet syncServerMsptMetricsData true
+/carpet tiscmNetworkProtocol true
+/carpet tntDoNotUpdate true
+/carpet voidDamageAmount 1000
+/carpet voidDamageIgnorePlayer true
+/carpet voidRelatedAltitude -1.0
+
+/carpet setDefault language zh_cn
+/carpet setDefault accurateBlockPlacement true
+/carpet setDefault antiCheatDisabled true
+/carpet setDefault antiSpamDisabled true
+/carpet setDefault blockPlacementIgnoreEntity true
+/carpet setDefault blockStateSyncing true
+/carpet setDefault carpets true
+/carpet setDefault cleanLogs true
+/carpet setDefault commandManipulate ops
+/carpet setDefault creativeNetherWaterPlacement true
+/carpet setDefault creativeNoClip true
+/carpet setDefault creativeNoItemCooldown true
+/carpet setDefault creativeOpenContainerForcibly true
+/carpet setDefault ctrlQCraftingFix true
+/carpet setDefault defaultLoggers mobcaps,tps,tickWarp,lightQueue,memory
+/carpet setDefault enchantCommandNoRestriction true
+/carpet setDefault entityPlacementIgnoreCollision true
+/carpet setDefault entityTrackerInterval 1
+/carpet setDefault explosionNoBlockDamage true
+/carpet setDefault fillLimit 20000000
+/carpet setDefault fillUpdates false
+/carpet setDefault flippinCactus true
+/carpet setDefault fluidDestructionDisabled true
+/carpet setDefault hopperCounters true
+/carpet setDefault hopperCountersUnlimitedSpeed true
+/carpet setDefault hopperNoItemCost true
+/carpet setDefault HUDLoggerUpdateInterval 1
+/carpet setDefault instantCommandBlock true
+/carpet setDefault largeBarrel true
+/carpet setDefault lightEngineMaxBatchSize 200
+/carpet setDefault lightQueueLoggerSamplingDuration 20
+/carpet setDefault persistentLoggerSubscription true
+/carpet setDefault placementRotationFix true
+/carpet setDefault portalCreativeDelay 20
+/carpet setDefault repeaterHalfDelay true
+/carpet setDefault stopCommandDoubleConfirmation true
+/carpet setDefault structureBlockDoNotPreserveFluid true
+/carpet setDefault structureBlockLimit 1024
+/carpet setDefault syncServerMsptMetricsData true
+/carpet setDefault tiscmNetworkProtocol true
+/carpet setDefault tntDoNotUpdate true
+/carpet setDefault voidDamageAmount 1000
+/carpet setDefault voidDamageIgnorePlayer true
+/carpet setDefault voidRelatedAltitude -1.0

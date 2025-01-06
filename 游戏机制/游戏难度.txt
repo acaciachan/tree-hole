@@ -1,0 +1,93 @@
+主难度：和平(peaceful)，简单(easy)，普通(normal)，困难(haCD)
+
+MC的最小时间单位为tick，现实世界1秒钟=20tick
+MC里一天(MC日)为24000tick=20分钟，也就是白天10分钟，晚上10分钟；
+
+
+世界总时间：用来表示世界已经走过了多少个tick，世界总时间 = 世界天数*24000+当日时间(/time query daytime)，
+区块占据时间：玩家在该区块每tick都会使累计时间+1，多个玩家会叠加。
+
+区块难度：
+	三个重要参数：
+	1.世界时间进度值(DT=0~0.25)：
+		世界总时间为 0~3 MC日，世界时间进度值 = 0
+		世界总时间为 3~63 MC日，世界时间进度值 = 0.25*(世界总时间 - 3*24000)/(60*24000) = 0~0.25
+		世界总时间为 63~+∞ MC日，世界时间进度值 = 0.25
+
+	2.区块占据时间进度值(CIT=0~1):
+		区块占据时间小于150 MC日，CIT = 区块占据时间 / (150*24000)；
+		区块占据时间大于150 MC日，CIT = 1；
+
+	3.月亮亮度(Moon=0~1)：
+	月相有8种，每种月相都有对应的月亮亮度；
+	月亮亮度只有5种：一种为0，两种为0.25，两种为0.5，两种为0.75，一种为1。
+	(8种月相与之对应亮度的代码：MOON_BRIGHTNESS_PER_PHASE = new float[]{1.0F(满月), 0.75F, 0.5F, 0.25F, 0.0F(新月), 0.25F, 0.5F, 0.75F})
+
+
+	(可忽略)计算中间过程：
+		区块难度参数(k)：
+			k = 区块占据时间进度值(CIT) + min{世界时间进度值(DT), 月亮亮度*0.25}；
+			(注意，min{}内的两个参数范围均为 0~0.25)
+		
+		区块难度(CD)：
+			CD = 0.75 + 世界时间进度值(DT)(非困难模式再*0.75) + 区块难度参数(k)(简单模式下k再乘0.5)；
+			普通模式下r再乘2，困难模式下r再乘3
+	
+	整理后，每个难度：
+	和平模式：CD = 0
+	简单模式：CD = 1*(0.75 + DT + 0.5*(CIT*0.75 + min{DT,Moon*0.25}) = 0.75 ~ 1.5
+	普通模式：CD = 2*(0.75 + DT + CIT*0.75 + min{DT,Moon*0.25}) = 1.5 ~ 4
+	困难模式：CD = 3*(0.75 + DT + CIT + min{DT,Moon*0.25}) = 2.25 ~ 6.75
+	
+	实际上我们需要考虑的往往是游戏时间超过63 MC日后，世界时间进度值会饱和(DT=0.25)，有：
+	和平模式：CD = 0
+	简单模式：CD = 1 + 0.375*CIT + 0.125*Moon = 1 ~ 1.5
+	普通模式：CD = 2 + 1.5*CIT + 0.5*Moon = 2 ~ 4
+	困难模式：CD = 3 + 3*CIT + 0.75*Moon = 3 ~ 6.75
+	
+区块难度指数(CDM)：
+	区块难度小于2，区块难度因子 CDM = 0
+	区块难度为2~4，区块难度因子 CDM = (CD-2)/2
+	区块难度大于4，区块难度因子 CDM = 1
+
+一般情况下是世界时间进度值饱和后，要让某个区块难度指数到达上限(CDM=1)，且月相的波动下总能达到上线：
+	和平难度：CDM恒为0
+	简单难度：CIT溢出CDM依然受月相影响，CD = 1.375 + 0.125*Moon = 1.375 ~ 1.5，CDM恒为零
+	普通难度：CIT溢出CDM依然受月相影响，CD = 3.5 + 0.5*Moon = 3.5 ~ 4，CDM = 0.75 ~ 1
+	困难模式：CIT>=1/3(50MC天，16.67小时)，CD = 4 + 0.75*Moon = 4 ~ 4.75，CDM恒为1
+
+区块难度(CD)影响：
+略
+
+区块难度指数(CDM)影响：
+僵尸成为牢大的概率为 0.05*CDM
+	只有牢大才能召唤增援，血量依然为20，但是上限很高，最大能到100
+生物捡起掉落物的概率为 0.55*CDM
+生物携带盔甲的概率为 0.15*CDM
+生物的武器附魔概率为 0.25*CDM
+生物的每件盔甲附魔概率为 0.5*CDM
+生物的每件盔甲附魔等级为 5+18*CDM
+史莱姆尺寸：
+小型：
+
+
+还没整理
+    public SpawnGroupData finalizeSpawn(
+        ServerLevelAccessor serverLevelAccessor,
+        DifficultyInstance difficultyInstance,
+        EntitySpawnReason entitySpawnReason,
+        @Nullable SpawnGroupData spawnGroupData
+    ) {
+        RandomSource randomSource = serverLevelAccessor.getRandom();
+        int i = randomSource.nextInt(3);
+        if (i < 2 && randomSource.nextFloat() < 0.5F * difficultyInstance.getSpecialMultiplier()) {
+            i++;
+        }
+
+        int j = 1 << i;
+        this.setSize(j, true);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, entitySpawnReason, spawnGroupData);
+    }
+
+月相值影响：
+在沼泽y=51~69的位置，亮度小于等于7的位置，如果刷怪位置亮度小于一个0~7的随机数(概率为1-(亮度/7))，并且月相值大于一个0~1的随机数(概率为月相值)，那么有50%的概率生成一只史莱姆。
