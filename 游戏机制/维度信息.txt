@@ -1,0 +1,53 @@
+"fixed_time"：维度固定时间
+	某些维度天空时间是固定的
+	下界为18000(午夜)，末地为6000(正午)
+
+"has_skylight"：维度有天空光
+	主世界、主世界洞穴为ture
+	下界、末地为false
+
+"ambient_light"：维度环境光
+	主世界、主世界洞穴、下界：0.0
+	末地：0.1
+
+"monster_spawn_block_light_limit": 刷怪方块光亮度限制
+	主世界、主世界洞穴、末地：0
+	下界：15
+	
+"monster_spawn_light_level": 
+	主世界、主世界洞穴、末地：uniform(0 ~ 7)
+	下界：7
+
+"has_ceiling"：维度有天花板
+	主世界、末地为true
+	主世界洞穴、下界为false
+
+"ultrawarm"：维度极热(导致无法产生水)
+	下界为true
+	主世界、主世界洞穴、末地为false
+
+"natural"：自然？
+	主世界、主世界洞穴为ture
+	下界、末地为false
+
+
+"infiniburn"：维度某些方块永久着火，只针对普通火，不针对灵魂火
+	主世界：下界岩、岩浆块
+	下界：(复制主世界的)
+	末地：(复制主世界的)、鸡眼
+
+"has_raids"
+	主世界、主世界洞穴为ture
+	下界、末地为false	
+	
+"piglin_safe"：猪灵安全(不僵尸化)
+	主世界、主世界洞穴为false
+	下界、末地为true
+
+"bed_works"：
+	主世界、主世界洞穴为ture
+	下界、末地为false
+
+"respawn_anchor_works"：
+	下界为ture
+	主世界、主世界洞穴、末地为false	

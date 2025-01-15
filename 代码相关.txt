@@ -1,0 +1,4 @@
+是否含水：getFluidState(blockPos).is(FluidTags.WATER)
+是否是水：getBlockState(blockPos).is(Blocks.WATER)
+
+刷怪条件大全：net.minecraft.world.entity.SpawnPlacements#checkSpawnRules

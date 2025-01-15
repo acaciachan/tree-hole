@@ -1,0 +1,9 @@
+通用追踪距离(FOLLOW_RANGE)为32
+net.minecraft.world.entity.ai.attributes.Attributes#FOLLOW_RANGE
+
+getVisibilityPercent(获取可见性百分比)：
+	初始值d=1
+	如果在潜行，d *= 0.8；
+	如果是隐身，d *= 0.7*f = min(1 - 穿盔甲比例, 0.1)，盔甲比例 = 有盔甲槽位 ? 盔甲数/总盔甲槽位 : 0
+	如果头戴猎人的头颅，d *= 0.5
+	return d

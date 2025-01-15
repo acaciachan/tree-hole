@@ -1,0 +1,134 @@
+i = 晴天计时器
+j = 雨天计时器
+k = 雷暴计时器
+
+时间循环
+advanceWeatherCycle():
+	i = 晴天计时器
+	j = 雨天计时器
+	k = 雷暴计时器
+	bl雷 = isThundering
+	bl雨 = isRaining
+
+	if i>0:
+		晴天部分
+		i--
+		j = bl雷 ? 0 : 1
+		k = bl雨 ? 0 : 1
+		bl雷 = false
+		bl雨 = false
+	else:
+		雷暴部分
+		if j > 0:
+			--j
+			if j == 0: isThundering = !isThundering
+		elif(isThundering):
+			j = Thunder_Duration(雷暴持续时长) = randomInt(3600, 15600) = 3分钟 ~ 13分钟 = 0.15 ~0.55 MC日
+		else:
+			j = Thunder_Delay(雷暴延时) = randomInt(12000, 180000) = 10分钟 ~ 150分钟 = 0.5 ~ 7.5 MC日
+		
+		```雨天部分
+		if k > 0:
+			--k
+			if k == 0: isThundering = !isThundering
+		elif(isRaining):
+			k = Rain_Duration(雨天持续时长) = randomInt(12000, 24000) = 10分钟 ~ 20分钟 = 0.5 ~ 1.0 MC日
+		else:
+			k = Rain_Delay(雨天延时) = randomInt(12000, 180000) = 10分钟 ~ 150分钟 = 0.5 ~ 7.5 MC日
+		
+		```更新天气
+		this.serverLevelData.setThunderTime(j);
+		this.serverLevelData.setRainTime(k);
+		this.serverLevelData.setClearWeatherTime(i);
+		this.serverLevelData.setThundering(bl雷);
+		this.serverLevelData.setRaining(bl雨);
+	
+	雷暴百分比(thunderLevel)(百分比，表示雷暴开始或结束的程度，每tick±1%直到100%或0%)
+	oThunderLevel = thunderLevel (上个tick的thunderLevel)
+	thunderLevel += isThundering ? +0.01 : -0.01
+	thunderLevel = clamp(, 0.00, 1.00)
+	
+	雨天百分比(rainLevel)(百分比，表示降雨开始或结束的程度，每tick±1%直到100%或0%)
+	oRainLevel = rainLevel (上个tick的rainLevel)
+	rainLevel += isRaining ? +0.01 : -0.01
+	rainLevel = clamp(, 0.00, 1.00)
+	
+	更新玩家某些变化的部分
+    broadcast...
+
+MC最基础的两个时间：互相独立
+	gametime：游戏时间
+		只能使用“/tick”命令控制，不能随意指定数值，也不能减小
+		只能随着时间流逝慢慢增大，“/tick”命令能控制流速
+		决定着游戏里的各种计划刻、方块事件、实体、方块实体等几乎所有的游戏机制的时刻
+
+	dayTime：天空时间
+		使用“/time query daytime”获取天空时间
+		使用“/time set/add”命令控制，可以随便改数值
+		使用“/gamerule doDaylightCycle”控制流逝或停止
+		决定游戏内的天空等表象的时间，影响村民工作、天空亮度、天气、阳光感应板等表象的时间
+		数值流逝会越来越大，每经过 24000tick=20min 恰好是mc的一个昼夜循环
+		例如dayTime=100000(即4*24000+4000)实际上就是第四天的第4000tick
+		fixed_time：某些维度天空时间是固定的，下界为18000(午夜)，末地为6000(正午)
+
+MC由以上两个基础时间引出的时间相关参数：
+	day：第几天
+		day = dayTime\24000 (整除)
+		使用“/time query day”获取这是“第几天”
+		
+	timeOnThisDay：当天的时刻
+		timeOnThisDay = dayTime % 24000 (求余数)
+		表示每天所处的时刻，0=清晨，6000=正午，12000=傍晚，18000=午夜
+		
+	MoonPhase：月相(主要用于计算月光率)
+		MoonPhase = ((dayTime\24000)% 8 + 8) % 8 (+8%8的部分防止出现负数)
+			= (dayTime\24000)% 8 (一般情况下，dayTime没有溢出变成负数的话 dayTime >= 0)
+			= day % 8
+		结论：第 n+0 ~ n+7 天时(n>=0)，月相值为 0~7
+		
+	MoonBrightness：月光率
+		当月相分别为0~7时，月光率分别为{1.0, 0.75, 0.5, 0.25, 0.0, 0.25, 0.5, 0.75}
+		月相		月光率	月相名称
+		0		1		满月
+		1		0.75	亏凸月
+		2		0.5		下弦月
+		3		0.25	残月
+		4		0		新月
+		5		0.25	娥眉月
+		6		0.5		上弦月
+		7		0.75	盈凸月
+
+其它坑爹参数：	
+	timeOfDay：每天的正午流逝百分比
+		源代码简化为python代码：
+		def timeOfDay(t):
+			d = (t / 24000.0 - 0.25) % 1.0  # 取小数部分
+			e = 0.5 - numpy.cos(d * numpy.pi) / 2.0
+			return (d * 2.0 + e) / 3.0
+		
+		画图后分析：
+			1.	这是是个函数，周期正好为 1MC日=24000tick
+			2.	每个周期内，函数值近似线性的从0增加到1，实际取值范围是[0,1)
+			3.	当t=6000+24000n时函数值为0，t=6000+23999n时函数值为0.999...
+			4.	可近似为以下式子：timeOfDay(t) = ((dayTime-6000)%24000)/24000
+			5.	总结：每天正午时函数值从0开始线性增加，直到明天的正午的前一刻无限接近于1，然后重复这个循环
+			6.	我觉得适合叫做“每天的正午流逝百分比”
+	
+	sunAngle：太阳角度
+		sunAngle = 2π * timeOfDay
+
+阳光传感器：
+	i = skyLight - skyDarken
+	f = 2π * skyDarken
+	if 反转阳光传感器：
+		i = 15 - i
+	elif: i > 0
+		g = f < π ？0 : 2π
+		f += (g - f) * 0.2
+		i = round(cos(f)) 
+	return clamp(i, 0, 15)
+	
+	
+	
+	
+	
