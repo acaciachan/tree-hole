@@ -1,24 +1,24 @@
 net.minecraft.world.entity.SpawnPlacementTypes
 	SpawnPlacementTypes：
-		NO_RESTRICTIONS (无限制) = true
+		NO_RESTRICTIONS (无限制) = 无条件可以
 		IN_WATER (水中) = 世界边境之内 && 此方块含水 && 上方不是红石导体
 		IN_LAVA (岩浆中) = 世界边境之内 && 此方块含岩浆
 		ON_GROUND (在地面) = 世界边境之内 
 			&& 下方方块允许生成此生物(isValidSpawn)
-			&& 此方块和上方方块都是合法的生成空位(isValidEmptySpawnBlock)
+			&& 此方块和上方方块两个位置都是合法的生成空位(isValidEmptySpawnBlock)
 	
 	其中 ON_GROUND (在地面) 两个判断比较复杂：
 	
 		isValidSpawn (生物能否在这上面生成)：
-			通用判定：上表面支撑形状完整 && 发光亮度 < 14
-			特判()：
+			通用判定：上表面“方块支撑形状”完整 && 发光亮度 < 14
+			特判(无视通用判定)：
 				never：
-					基岩、屏障、
-					玻璃、染色玻璃、铜网、
-					活板门、紫颂花、脚手架(1.19.3+)
+					无法破坏方块：基岩、屏障、
+					玻璃类：玻璃、染色玻璃、铜网、
+					装饰类：活板门、紫颂花、脚手架(1.19.3+)
 				always：
-					灵魂沙、泥巴、
-					雕刻南瓜、南瓜灯、红石灯
+					两个上表面碰撞箱不完整的：灵魂沙、泥巴、
+					三个光源方块：雕刻南瓜、南瓜灯、红石灯
 				
 				岩浆块：entityType.fireImmune()
 				树叶：豹猫和鹦鹉

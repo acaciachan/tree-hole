@@ -1,28 +1,31 @@
 工具：(精准和时运不能共存)
-效率4 + 精准 + 耐久3
-with minecraft:efficiency 4 with minecraft:silk_touch 1 with minecraft:unbreaking 3
-效率4 + 时运3 + 耐久3
-with minecraft:efficiency 4 with minecraft:fortune 3 with minecraft:unbreaking 3
+	效率4 + 精准 + 耐久3
+	with minecraft:efficiency 4 with minecraft:silk_touch 1 with minecraft:unbreaking 3
+	效率4 + 时运3 + 耐久3
+	with minecraft:efficiency 4 with minecraft:fortune 3 with minecraft:unbreaking 3
 
 帽子(保护4 + 水下呼吸3 + 水下速掘 + 耐久3)：
-/cenchant minecraft:chainmail_helmet with minecraft:protection 4 with minecraft:respiration 3 with minecraft:aqua_affinity * with minecraft:unbreaking 3
+	/cenchant minecraft:chainmail_helmet with minecraft:protection 4 with minecraft:respiration 3 with minecraft:aqua_affinity * with minecraft:unbreaking 3
 胸甲(保护4 + 耐久3 - 荆棘)：
-/cenchant minecraft:chainmail_chestplate with minecraft:protection 4 with minecraft:unbreaking 3 without minecraft:thorns *
+	/cenchant minecraft:chainmail_chestplate with minecraft:protection 4 with minecraft:unbreaking 3 without minecraft:thorns *
 裤子(保护4+耐久3)：
-/cenchant minecraft:chainmail_leggings with minecraft:protection 4 with minecraft:unbreaking 3
+	/cenchant minecraft:chainmail_leggings with minecraft:protection 4 with minecraft:unbreaking 3
 鞋子(深海探索者与冰霜行者不能共存)
-(保护3 + 深海探索者3 + 耐久3)：
-/cenchant minecraft:chainmail_boots with minecraft:protection 4 with minecraft:depth_strider 3 with minecraft:unbreaking 3
-(保护3 + 耐久3)：
-/cenchant minecraft:chainmail_boots with minecraft:protection 4 without minecraft:depth_strider 3 with minecraft:unbreaking 3
+	(保护3 + 深海探索者3 + 耐久3)：
+	/cenchant minecraft:chainmail_boots with minecraft:protection 4 with minecraft:depth_strider 3 with minecraft:unbreaking 3
+	(保护3 + 耐久3)：
+	/cenchant minecraft:chainmail_boots with minecraft:protection 4 without minecraft:depth_strider 3 with minecraft:unbreaking 3
+	(摔落缓冲)
+	/cenchant minecraft:chainmail_boots with minecraft:feather_falling 4 without minecraft:protection * without minecraft:blast_protection * without minecraft:fire_protection * without minecraft:projectile_protection *
+
 弓：
 
 
 剑：(横扫不能与锋利或杀手同时附魔)
-锋利4 + 掠夺3 + 耐久3 - 击退
-/cenchant minecraft:diamond_sword with minecraft:sharpness 4 with minecraft:looting 3 with minecraft:unbreaking 3 without minecraft:knockback *
-亡灵5 + 掠夺3 + 耐久3 - 击退
-/cenchant minecraft:diamond_sword with minecraft:smite 5 with minecraft:looting 3 without minecraft:knockback *
+	锋利4 + 掠夺3 + 耐久3 - 击退
+	/cenchant minecraft:diamond_sword with minecraft:sharpness 4 with minecraft:looting 3 with minecraft:unbreaking 3 without minecraft:knockback *
+	亡灵5 + 掠夺3 + 耐久3 - 击退
+	/cenchant minecraft:diamond_sword with minecraft:smite 5 with minecraft:looting 3 without minecraft:knockback *
 
 
 
