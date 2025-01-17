@@ -14,7 +14,7 @@
 			k = isThundering ? 10 : skyDarken
 			
 			return skyLight <= randomInt(0~31)
-			&& i >= 15 || i >= blockLight
+			&& i = 15 || i >= blockLight
 			&& max(skyLight - k, blockLight) <= j
 	
 	checkAnimalSpawnRules (动物通用生成)
