@@ -6,16 +6,17 @@
 		return 难度不是和平 && checkMobSpawnRules
 	
 	checkMonsterSpawnRules (通用怪物生成)
-		return 难度不是和平 && checkMobSpawnRules && (生成来自试炼刷怪笼 || isDarkEnoughToSpawn)
+		return 难度不是和平 && checkMobSpawnRules 
+			&& (生成来自试炼刷怪笼 || isDarkEnoughToSpawn)
 		
 		其中isDarkEnoughToSpawn (生成位置足够暗)：
-			i = 维度("monster_spawn_block_light_limit") = (下界=15，其余=0)
-			j = 维度("monster_spawn_light_level") = (下界=7, 其余=randomInt(0~7))
+			DimBL = 维度("monster_spawn_block_light_limit") = (下界=15，其余=0)
+			DimL = 维度("monster_spawn_light_level") = (下界=7, 其余=randomInt(0~7))
 			k = isThundering ? 10 : skyDarken
 			
-			return skyLight <= randomInt(0~31)
-			&& i = 15 || i >= blockLight
-			&& max(skyLight - k, blockLight) <= j
+			return skyLight <= randomInt(0~31) (概率(1 - skyLight/32))
+			&& DimBL = 15 || DimL >= blockLight
+			&& DimL => max(skyLight - k, blockLight) 
 	
 	checkAnimalSpawnRules (动物通用生成)
 		return 下方方块(BlockTags.ANIMALS_SPAWNABLE_ON)(只有草方块)
