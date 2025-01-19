@@ -30,15 +30,19 @@
 			可见从无论什么时候，夜间大部分时间暗度为11，白天暗度取决于天气晴天为0,雨天为3,雷暴为5
 			每天的白天和夜间切换阶段有大约1.4min的暗度近似线形变化的时间，这段时间会因为天气越来越恶劣变得略微增长
 	
-	
+	rawBrightness(0) (原始亮度)
+		max(天空光照, 方块光照，0)
+		
 	rawBrightness(i) (原始亮度)
 		max(天空光照 - i, 方块光照，0)
-	
-	maxLocalRawBrightness(i) (最大本地原始亮度)
+
+	maxLocalRawBrightness() (实际亮度)
+		return 世界之内 ? max(天空光照 - 天空暗度, 方块光照) : 15
+
+	maxLocalRawBrightness(i) (参考亮度)
 		return 世界之内 ? max(天空光照 - i, 方块光照) : 15
 	
-	maxLocalRawBrightness() (最大本地原始亮度)
-		return 世界之内 ? max(天空光照 - 天空暗度, 方块光照) : 15
+
 
 相关亮度：
 

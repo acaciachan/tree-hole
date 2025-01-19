@@ -25,4 +25,7 @@
 		其中：isBrightEnoughToSpawn:
 			return max(skyLight, blockLight) >= 9
 	
-	
+	简而言之
+	Mob：下方方块允许生成
+	Monster = Mob && DarkEnough
+	Animals = 草方块上 && max(skyLight, blockLight) >= 9

@@ -76,11 +76,11 @@ MC由以上两个基础时间引出的时间相关参数：
 		day = dayTime\24000 (整除)
 		使用“/time query day”获取这是“第几天”
 		
-	timeOnThisDay：当天的时刻
+	timeOnThisDay：当天的时刻(从清晨开始)
 		timeOnThisDay = dayTime % 24000 (求余数)
 		表示每天所处的时刻，0=清晨，6000=正午，12000=傍晚，18000=午夜
 
-	timeOfDay：当天的时刻(从正午开始算)
+	timeOfDay：当天的时刻(从正午开始)
 		源代码简化为python代码：
 		def timeOfDay(t):
 			d = (t / 24000.0 - 0.25) % 1.0  # 取小数部分

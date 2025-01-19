@@ -10,7 +10,7 @@ net.minecraft.world.entity.SpawnPlacementTypes
 	其中 ON_GROUND (在地面) 两个判断比较复杂：
 	
 		isValidSpawn (生物能否在这上面生成)：
-			通用判定：上表面“方块支撑形状”完整 && 发光亮度 < 14
+			通用判定：上表面“方块支撑形状”完整 && 方块发光亮度 < 14
 			特判(无视通用判定)：
 				never：
 					无法破坏方块：基岩、屏障、
