@@ -593,6 +593,15 @@ public static void spawnCategoryForPosition(
 					: serverLevel.noCollision(entityType.getSpawnAABB(mutableBlockPos.getX() + 0.5, mutableBlockPos.getY(), mutableBlockPos.getZ() + 0.5)); // 检查生物的碰撞箱是否与其它方块的碰撞箱冲突
 			}
 		}
+
+			public AABB getSpawnAABB(double d, double e, double f) {
+				float g = this.spawnDimensionsScale * this.getWidth() / 2.0F;
+				float h = this.spawnDimensionsScale * this.getHeight();
+				return new AABB(d - g, e, f - g, d + g, e + h, f + g);
+			}
+
+
+
 		/** 返回true的条件是: 
 				生成类型不是misc(杂项)
 				&& (距离玩家<=生物的消失距离 || 能远离玩家生成(canSpawnFarFromPlayer))
@@ -934,12 +943,12 @@ public interface SpawnPlacementTypes {
 	
 	但是侦测器、活塞、蜜块这样子的不可能充能方块都是可以的，最多就是阻止生物的某个点生成
 
-2. 游走：
+2. 游走距离：
 	游走只发生在水平面，因此如果地形不平坦也会影响生成的效率
 	游走通过两个0~5的随机数差值来决定，实际上类似三角分布，因此多次游走的后更倾向于原点的位置
 	P(n) = (6-|n|)/36
 
-3. 怪物选择：
+3. 游走影响效率：
 	for循环里，是先发生游走，再选择怪物，因此根据环境选择怪物是发生在第一次游走的位置的，由此有以下技巧:
 	1. 由于大多数生物每次成组生成的数量为1~4次，在大范围内都可以生成，那么刷怪区域往外再扩建20个方块及以内，理论上都是可以增加生成概率。
 	
