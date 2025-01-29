@@ -25,7 +25,9 @@
 	锋利4 + 掠夺3 + 耐久3 - 击退
 	/cenchant minecraft:diamond_sword with minecraft:sharpness 4 with minecraft:looting 3 with minecraft:unbreaking 3 without minecraft:knockback *
 	亡灵5 + 掠夺3 + 耐久3 - 击退
-	/cenchant minecraft:diamond_sword with minecraft:smite 5 with minecraft:looting 3 without minecraft:knockback *
+	/cenchant minecraft:diamond_sword with minecraft:smite 5 with minecraft:looting 3 with minecraft:unbreaking 3 without minecraft:knockback *
+	还需要横扫之刃3的附魔书：
+	/cenchant minecraft:book with minecraft:sweeping_edge 3
 
 
 
