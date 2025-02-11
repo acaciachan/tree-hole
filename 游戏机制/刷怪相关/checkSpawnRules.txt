@@ -10,13 +10,13 @@
 			&& (生成来自试炼刷怪笼 || isDarkEnoughToSpawn)
 		
 		其中isDarkEnoughToSpawn (生成位置足够暗)：
-			DimBL = 维度("monster_spawn_block_light_limit") = (下界=15，其余=0)
-			DimL = 维度("monster_spawn_light_level") = (下界=7, 其余=randomInt(0~7))
-			k = isThundering ? 10 : skyDarken
+			DimBlockLight = 维度("monster_spawn_block_light_limit") = (下界=15，其余=0)
+			DimLight = 维度("monster_spawn_light_level") = (下界=7, 其余=0~7)
+			skyDarkenOr10 = isThundering ? 10 : skyDarken
 			
-			return skyLight <= randomInt(0~31) (概率(1 - skyLight/32))
-			&& DimBL = 15 || DimL >= blockLight
-			&& DimL => max(skyLight - k, blockLight) 
+			return skyLight <= 0~31的随机整数
+			&& DimBlockLight = 15 || DimLight >= blockLight
+			&& DimLight => max(blockLight, skyLight - skyDarkenOr10) 
 	
 	checkAnimalSpawnRules (动物通用生成)
 		return 下方方块(BlockTags.ANIMALS_SPAWNABLE_ON)(只有草方块)
