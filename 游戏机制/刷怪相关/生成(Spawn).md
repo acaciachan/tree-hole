@@ -608,7 +608,7 @@ public static void spawnCategoryForPosition(
 				&& canSpawnMobAt
 				&& 通过此生物的SpawnPlacementsTypes检查
 				&& 通过此生物的SpawnPredicate的检查
-				&& 生成的生物碰撞箱不会与其它方块的碰撞箱
+				&& 生成的生物碰撞箱不会与**方块**的碰撞箱
 		**/
 
 		// 验证生物在新的位置是否依然可生成
@@ -626,7 +626,7 @@ public static void spawnCategoryForPosition(
 				(距离玩家<=立即消失距离 || 不会远离玩家消失(removeWhenFarAway))
 				&& 允许自然生成 
 				&& 生物碰撞箱不在液体中 
-				&& 生物碰撞箱没有被方块碰撞箱阻塞
+				&& 生物碰撞箱没有被**实体**的碰撞箱阻塞
 		**/
 ```
 
@@ -894,15 +894,15 @@ public interface SpawnPlacementTypes {
 
 ### 2.4.3 自然生成总结
 简化为以下伪代码：
-```java
+```
 如果原点方块不是红石导体：
 	j = 三组游走总生成数量
 	三组从原点出发的随机游走(互不干扰)：
-		每组生成进行o次：
+		每组生成进行o次生成：
 			x,z 随机偏移(randomInt(6)-randomInt(6))
 			o = 随机1~4，仅作为默认数值，后面会根据选中的生物修改
 			p = 0 (热带鱼相关的计数器)
-			如果：
+			如果(1)：
 				当前位置距离玩家>24.0 && 距离出生点>=24.0 
 				&& (当前位置还在生成原点的区块 || 当前位置强加载)
 			那么：
@@ -910,22 +910,21 @@ public interface SpawnPlacementTypes {
 				如果选取出来的为空，直接停止这组游走
 				spawnData为选取到的生成生物的信息
 				o = 随机取该生物生成次数(最少次数~最大次数)
-			
-				如果：
+				如果(2)：
 					满足生成势能判断
 					&& 生成类型不是 misc(杂项)
-					&& (距离玩家<=生物的消失距离 || 能远离玩家生成(canSpawnFarFromPlayer))
+					&& (距离玩家 <= 生物的立即消失距离 || 能远离玩家生成(canSpawnFarFromPlayer))
 					&& 此生物依然在新位置的可生成列表中(canSpawnMobAt)
 					&& 通过此生物的SpawnPlacementsTypes检查
 					&& 通过此生物的SpawnPredicate的检查
-					&& 生成的生物碰撞箱不会与其它方块的碰撞箱
+					&& 生成的生物碰撞箱不会被其它**方块**的碰撞箱阻塞
 				那么：
-					生成改生物，偏航角随机，俯仰角0度(水平)
-					再如果：
-						(距离玩家<=立即消失距离 || 不会远离玩家消失(removeWhenFarAway))
+					在缓存中生成此生物，偏航角随机(随机旋转)，俯仰角0度(平视)
+					如果(3)：
+						(距离玩家 <= 生物的立即消失距离 || 不会远离玩家消失(removeWhenFarAway))
 						&& 允许自然生成 
 						&& 生物碰撞箱不在液体中 
-						&& 生物碰撞箱没有被方块碰撞箱阻塞
+						&& 生物碰撞箱没有被**实体**的碰撞箱阻塞
 					那么：
 						调用该生物的 finalizeSpawn 完善生成
 						j++, p++
@@ -935,6 +934,7 @@ public interface SpawnPlacementTypes {
 						如果 j >= MaxSpawnClusterSize ，终止本区块这种生物类型的成群生成
 						如果 p 达到了相关的数量限制(热带鱼独享)，只终止这组游走
 ```
+
 再根据社区多年的经验，可总结出一下：
 1. 生成原点：
 	如果最开始的生成位置是**红石导体**，那么这个区块的这种生物(MobCategory)就**结束啦！**
