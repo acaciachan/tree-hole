@@ -1,0 +1,3 @@
+/give @s minecraft:skull 1 3 {SkullOwner:\"acaciachan\"}
+/give @s minecraft:player_head{SkullOwner:\"acaciachan\"}
+/give @s minecraft:player_head[profile\u003d{name:\"acaciachan\"}]
