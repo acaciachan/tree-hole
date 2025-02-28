@@ -15,7 +15,7 @@
 			skyDarkenOr10 = isThundering ? 10 : skyDarken
 			
 			return skyLight <= 0~31的随机整数
-			&& DimBlockLight = 15 || DimBlockLight >= blockLight
+			&& DimBlockLight >= blockLight
 			&& DimLight >= max(blockLight, skyLight - skyDarkenOr10) 
 	
 	checkAnimalSpawnRules (动物通用生成)
