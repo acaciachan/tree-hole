@@ -14,9 +14,9 @@
 			DimLight = 维度("monster_spawn_light_level") = (下界=7, 其余=0~7)
 			skyDarkenOr10 = isThundering ? 10 : skyDarken
 			
-			return skyLight <= 0~31的随机整数
-			&& DimBlockLight >= blockLight
-			&& DimLight >= max(blockLight, skyLight - skyDarkenOr10) 
+			return skyLight <= 0~31的随机整数 (天空光越暗越好，为0一定通过)
+			&& DimBlockLight >= blockLight (方块光 < 维度方块光限制)
+			&& DimLight >= max(blockLight, skyLight - skyDarkenOr10) (实际光 < 维度光限制) 
 	
 	checkAnimalSpawnRules (动物通用生成)
 		return 下方方块(BlockTags.ANIMALS_SPAWNABLE_ON)(只有草方块)
