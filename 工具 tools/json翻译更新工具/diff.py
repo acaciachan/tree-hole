@@ -1,10 +1,13 @@
 # 此代码由DeepSeek-R1生成，只会选文件夹里的一个文件对比(不要求名字相同，所以建议保证old和new初面都只有一个文件)
-# 用法：在old和new分别放要比较的新旧文件，运行compare.py，即可看到生成了compare.json文件：
+# 用法：在old和new分别放要比较的新旧文件，运行diff.py，即可看到生成了diff.json文件：
 # addition  :   增加的部分
 # deletion  :   删除的部分
 # modifications      :   key(左侧键)一样，但是value(右侧值)不一样
 
 output_origin = False # 是否保留原始数据
+
+old_file = 'en_us.json'
+new_file = 'en_us (2).json'
 
 import os
 import json
@@ -20,9 +23,6 @@ def flatten_dict(d, parent_key='', sep='.'):
         else:
             items[new_key] = v
     return items
-
-def find_first_json(folder):
-    return next((Path(folder)/f for f in os.listdir(folder) if f.endswith('.json')), None)
 
 def generate_comparison(old_data, new_data, output_original=True):
     """生成对比报告，包含统计信息"""
@@ -59,8 +59,6 @@ def generate_comparison(old_data, new_data, output_original=True):
     return result
 
 def main():
-    old_file = find_first_json('old')
-    new_file = find_first_json('new')
 
     if not old_file or not new_file:
         print("Error: 缺少JSON文件")
@@ -74,7 +72,7 @@ def main():
 
     comparison = generate_comparison(old_data, new_data)
 
-    with open('compare.json', 'w', encoding='utf-8') as f:
+    with open('diff.json', 'w', encoding='utf-8') as f:
         json.dump(comparison, f, ensure_ascii=False, indent=2)
 
     stats = comparison.copy()
@@ -85,7 +83,7 @@ def main():
     新增条目: {len(stats['additions'])}
     删除条目: {len(stats['deletions'])}
     修改条目: {len(stats['modifications'])}
-    完整结果已保存至 compare.json""")
+    完整结果已保存至 diff.json""")
 
 if __name__ == '__main__':
     main()

@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import math
 
-def clamp(value, min_value, max_value):
+def clamp(value, min_value, max_value): # 夹子
     return max(min_value, min(value, max_value))
 
-def timeOfDay(t):
+def timeOfDay(t): 
     d = (t / 24000.0 - 0.25) % 1.0  # %1.0 用来只取小数部分
     e = 0.5 - np.cos(d * np.pi) / 2.0
     return (d * 2.0 + e) / 3.0
@@ -36,15 +36,16 @@ df = pd.DataFrame({
     'skyBrightness': skyBrightness_values
 })
 
-df.to_csv('timeOfDay_and_skyBrightness.csv', index=True)
+df.to_csv('timeOfDay_and_skyBrightness.csv', index=False)
 
 print("CSV文件已导出")
 
 # 绘制图像
 plt.plot(time_values, timeOfDay_values, label='timeOfDay')
 plt.plot(time_values, skyBrightness_values, label='SkyBrightness')
-plt.title('Output of function over time')
-plt.xlabel('Time (ticks)')
-plt.ylabel('Output')
+plt.title('Time of Day and Sky Brightness Relationship')
+plt.xlabel('Game Time (Ticks)')
+plt.ylabel('Normalized Value / Brightness Level')
 plt.grid(True)
+plt.legend()
 plt.show()

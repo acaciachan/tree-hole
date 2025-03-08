@@ -15,7 +15,7 @@ private void tickChunks() {
 				profilerFiller.push("filteringTickingChunks");
 				this.collectTickingChunks(list);
 				profilerFiller.popPush("shuffleChunks");
-				Util.shuffle(list, this.level.random);
+				Util.shuffle(list, this.level.random); // 随机打乱
 				this.tickChunks(profilerFiller, m, list);  //注意这里，执行区块运算
 				profilerFiller.pop();
 			} finally {
@@ -54,7 +54,8 @@ private void tickChunks(ProfilerFiller profilerFiller, long l, List<LevelChunk> 
 	// 获取需要进行自然生成的实体种类
 	List<MobCategory> list2;
 	if (bl && (this.spawnEnemies || this.spawnFriendlies)) {
-		boolean bl2 = this.level.getLevelData().getGameTime() % 400L == 0L; // 每隔400tick bl2值才会变成一次true，用于定期触发生成持久不消失的生物("creature"(动物))
+		boolean bl2 = this.level.getLevelData().getGameTime() % 400L == 0L; 
+		// 每隔400tick bl2值才会变成一次true，用于定期触发生成“持久不消失”的生物(目前只有creature)
 		list2 = NaturalSpawner.getFilteredSpawningCategories(spawnState, this.spawnFriendlies, this.spawnEnemies, bl2); // 获取需要自然生成的实体种类
 	} else {
 		list2 = List.of();
@@ -87,6 +88,8 @@ private void tickChunks(ProfilerFiller profilerFiller, long l, List<LevelChunk> 
 可以看到，整个流程分为三步：
 
 1. 获取需要自然生成(NaturalSpawn)的生物种类
+	一般生物每tick都会生成
+	持久不消失的生物(creature)每400tick才生成一次
 
 2. 遍历所有需要运算的区块：自然生成(NaturalSpawn)和区块刻
 
@@ -98,37 +101,7 @@ private void tickChunks(ProfilerFiller profilerFiller, long l, List<LevelChunk> 
 
 ### 2.1.1 生物种类(MobCategory)
 
-在此之前我门需要首先了Mojang划分的生物种类(MobCategory)有哪些：
-
-```java
-public enum MobCategory implements StringRepresentable {
-    MONSTER("monster", 70, false, false, 128),
-    CREATURE("creature", 10, true, true, 128),
-    AMBIENT("ambient", 15, true, false, 128),
-    AXOLOTLS("axolotls", 5, true, false, 128),
-    UNDERGROUND_WATER_CREATURE("underground_water_creature", 5, true, false, 128),
-    WATER_CREATURE("water_creature", 5, true, false, 128),
-    WATER_AMBIENT("water_ambient", 20, true, false, 64),
-    MISC("misc", -1, true, true, 128);
-
-    public static final Codec<MobCategory> CODEC = StringRepresentable.fromEnum(MobCategory::values);
-    private final int max;
-    private final boolean isFriendly;
-    private final boolean isPersistent;
-    private final String name;
-    private final int noDespawnDistance = 32;
-    private final int despawnDistance;
-
-    private MobCategory(final String string, final int i, final boolean bl, final boolean bl2, final int j) {
-        this.name = string;
-        this.max = i;
-        this.isFriendly = bl;
-        this.isPersistent = bl2;
-        this.despawnDistance = j;
-    }
-// ......
-}
-```
+在此之前我门需要首先了Mojang划分的生物种类(MobCategory)有哪些：net.minecraft.world.entity.MobCategory
 
 整理成表格:
 
@@ -146,19 +119,20 @@ public enum MobCategory implements StringRepresentable {
 
 1. 其中杂项(misc)类似于Others，不参与自然生成
 
-2. 友好(isFriendly)表示是否为友好生物。目前只有动物("creature")是true
+2. 友好(isFriendly)表示是否为友好生物。目前只有动物(creature)是true
 
-3. 持久(isPersistent)表示是否为持久存在不消失的生物。目前只有动物("creature")是true
+3. 持久(isPersistent)表示是否为持久存在不消失的生物。目前只有动物(creature)和杂项(misc)是true
 
-4. 立即消失距离(despawnDistance)表示距离最近玩家超过这个距离就会立即消失
+4. 立即消失距离(despawnDistance)表示距离最近玩家超过这个距离就会**立即消失**
 
-5. 不消失距离(noDespawnDistance)表示距离最近玩家超过这个距离就会开始消失，有玩家在这个范围内则不会
+5. 不消失距离(noDespawnDistance)表示距离最近玩家超过这个距离就**可以随机消失**，有玩家在这个范围内则不会
 
-5. 上限(max)表示单玩家附近最大的生物数量
+6. 上限(max)表示单玩家附近最大的生物数量
 
+7. 具体某种实体属于哪一类，去这里查看：net.minecraft.world.entity.EntityType
 
 ## 2.1.2 生物消失(despawn)：
-
+Mob类(重点)：net.minecraft.world.entity.Mob#checkDespawn
 ```java
     public void checkDespawn() {
         if (this.level().getDifficulty() == Difficulty.PEACEFUL && this.shouldDespawnInPeaceful()) {
@@ -189,16 +163,13 @@ public enum MobCategory implements StringRepresentable {
 
 分析生物的消失：
 
-1. 如果难度为和平模式，并且生物需要消失(shouldDespawnInPeaceful)，则直接消失。
-
+1. 如果难度为和平模式，并且生物在和平难度下消失(shouldDespawnInPeaceful)，则直接消失。
+	
 	其中 shouldDespawnInPeaceful() 方法：
 
 		怪物(Monster)：true
-
 		恶魂，幻翼，史莱姆(size > 0)：true
-
 		猪灵：false
-		
 		其它：false
 
 2. 如果生物因为各种原因带上了(setPersistenceRequired)持久属性，则不会消失，且noActionTime设置为0。
@@ -214,11 +185,8 @@ public enum MobCategory implements StringRepresentable {
 		Mob类生物默认为：true
 		
 		但有以下覆写(特判)：
-			1. 直接false，即不会过远消失
-			动物：return false
-			傀儡类：return false
-			悦灵：return false
-			
+			1. 直接false，即不会过远消失：动物(Animal)、傀儡类、悦灵
+
 			2. 看条件消失
 			鸡：return this.isChickenJockey()
 			猫：return !this.isTame() && this.tickCount > 2400
@@ -470,6 +438,8 @@ public static void spawnCategoryForPosition(
 			则返回下界堡垒特有怪物，否则就返回正常的getMobsAt获取的怪物
 				(下界堡垒的外结构不含下界堡垒的特殊怪物，只有内结构才有。
 				这里的特判使得如果生成位置下方是下界砖，在下界堡垒外结构也能刷那些特殊生物)
+			否则返回的就是，该点处根据自然结构和生物群系获取的怪物列表
+			(自然结构的json文件里面都是"spawn_overrides"，也就是如果这一项不为空的话，结构的生物列表会完全覆盖掉生物群系的生物列表)
 		 */
 
 
@@ -606,8 +576,8 @@ public static void spawnCategoryForPosition(
 				生成类型不是misc(杂项)
 				&& (距离玩家<=生物的消失距离 || 能远离玩家生成(canSpawnFarFromPlayer))
 				&& canSpawnMobAt
-				&& 通过此生物的SpawnPlacementsTypes检查
-				&& 通过此生物的SpawnPredicate的检查
+				&& 通过此生物的SpawnPlacements里的SpawnPlacementsTypes检查
+				&& 通过此生物的SpawnPlacements里的SpawnPredicate的检查
 				&& 生成的生物碰撞箱不会与**方块**的碰撞箱
 		**/
 
@@ -629,152 +599,59 @@ public static void spawnCategoryForPosition(
 				&& 生物碰撞箱没有被**实体**的碰撞箱阻塞
 		**/
 ```
+### 2.4.1 Mob.checkSpawnRules
 
-### 2.4.2 生物放置条件(SpawnPlacements)
+注意：mob.checkSpawnRules 与 SpawnPlacements.checkSpawnRules 不是同一个东西
+
+```java
+// Mob类(直接返回true)：
+    public boolean checkSpawnRules(LevelAccessor levelAccessor, EntitySpawnReason entitySpawnReason) {
+        return true;
+    }
+
+	// 其中有且只有一个覆写(PathFinderMob类)(也是直接返回true)：
+		public boolean checkSpawnRules(LevelAccessor levelAccessor, EntitySpawnReason entitySpawnReason) {
+			return this.getWalkTargetValue(this.blockPosition(), levelAccessor) >= 0.0F;
+		}
+
+		// 下面研究所有寻路生物(PathFinderMob)的覆写(直接返回true)：
+			public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
+				return 0.0F;
+			}
+
+		// 寻路类生物有一堆覆写，这里面终于有不是返回true的了
+		// 这些覆写里面几乎总是涉及“计算光照造成的寻路代价”
+			default float getPathfindingCostFromLightLevels(BlockPos blockPos) {
+				return this.getLightLevelDependentMagicValue(blockPos) - 0.5F; // 光照幻数 - 0.5
+			}
+```
+去翻阅我光照相关的分析，会发现这个“光照幻数”往往倍计算出来就是和0.5比较大小的
+	实际亮度为11，光照幻数：主世界和末地≈0.4，下界≈0.44
+	实际亮度为12，光照幻数：主世界和末地=0.5，下界=0.55
+	实际亮度为13，光照幻数：主世界和末地≈0.6，下界≈0.66
+
+下面列出所有的会让Mob.checkSpawnRules返回true条件：
+```java
+生物(Mob)：true
+	寻路类生物(PathFinderMob)：true
+		动物：下方是草方块 ? true : 实际光照 >= 12
+			蘑菇牛：下方是菌丝 ? true : 实际光照 >= 12
+			海龟：下方含水 || 下方是沙子 ? true : 实际光照 >= 12
+			炽足兽：当前位置是岩浆 || 身体未接触到岩浆 ? true : false
+			美西螈、蜜蜂：true
+		怪物：实际亮度(主世界 <= 12, 下界 < 12)
+			守卫者：下方含水 ? true : 实际亮度(主世界 <= 12, 下界 < 12)
+			蠹虫：下方是可寄生方块 ? true : 实际亮度(主世界 <= 12, 下界 < 12)
+			掠夺者、嘎吱怪、监守者、疣猪兽：true
+```
+
+
+### 2.4.3 生物放置条件(SpawnPlacements)
 
 Mojang给每一种生物定义了生成条件，以下是完整代码，粗略看一眼即可：
 ```java
 net.minecraft.world.entity.SpawnPlacements#checkSpawnRules
-public class SpawnPlacements {
-    private static final Map<EntityType<?>, SpawnPlacements.Data> DATA_BY_TYPE = Maps.newHashMap();
 
-    private static <T extends Mob> void register(
-        EntityType<T> entityType, SpawnPlacementType spawnPlacementType, Heightmap.Types types, SpawnPlacements.SpawnPredicate<T> spawnPredicate
-    ) {
-        SpawnPlacements.Data data = DATA_BY_TYPE.put(entityType, new SpawnPlacements.Data(types, spawnPlacementType, spawnPredicate));
-        if (data != null) {
-            throw new IllegalStateException("Duplicate registration for type " + BuiltInRegistries.ENTITY_TYPE.getKey(entityType));
-        }
-    }
-
-    public static SpawnPlacementType getPlacementType(EntityType<?> entityType) {
-        SpawnPlacements.Data data = DATA_BY_TYPE.get(entityType);
-        return data == null ? SpawnPlacementTypes.NO_RESTRICTIONS : data.placement;
-    }
-
-    public static boolean isSpawnPositionOk(EntityType<?> entityType, LevelReader levelReader, BlockPos blockPos) {
-        return getPlacementType(entityType).isSpawnPositionOk(levelReader, blockPos, entityType);
-    }
-
-    public static Heightmap.Types getHeightmapType(@Nullable EntityType<?> entityType) {
-        SpawnPlacements.Data data = DATA_BY_TYPE.get(entityType);
-        return data == null ? Heightmap.Types.MOTION_BLOCKING_NO_LEAVES : data.heightMap;
-    }
-
-    public static <T extends Entity> boolean checkSpawnRules(
-        EntityType<T> entityType, ServerLevelAccessor serverLevelAccessor, EntitySpawnReason entitySpawnReason, BlockPos blockPos, RandomSource randomSource
-    ) {
-        SpawnPlacements.Data data = DATA_BY_TYPE.get(entityType);
-        return data == null || data.predicate.test(entityType, serverLevelAccessor, entitySpawnReason, blockPos, randomSource);
-    }
-
-    static {
-        register(EntityType.AXOLOTL, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Axolotl::checkAxolotlSpawnRules);
-        register(EntityType.COD, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
-        register(
-            EntityType.DOLPHIN,
-            SpawnPlacementTypes.IN_WATER,
-            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-            AgeableWaterCreature::checkSurfaceAgeableWaterCreatureSpawnRules
-        );
-        register(EntityType.DROWNED, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Drowned::checkDrownedSpawnRules);
-        register(EntityType.GUARDIAN, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Guardian::checkGuardianSpawnRules);
-        register(EntityType.PUFFERFISH, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
-        register(EntityType.SALMON, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
-        register(
-            EntityType.SQUID,
-            SpawnPlacementTypes.IN_WATER,
-            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-            AgeableWaterCreature::checkSurfaceAgeableWaterCreatureSpawnRules
-        );
-        register(EntityType.TROPICAL_FISH, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TropicalFish::checkTropicalFishSpawnRules);
-        register(EntityType.ARMADILLO, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Armadillo::checkArmadilloSpawnRules);
-        register(EntityType.BAT, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Bat::checkBatSpawnRules);
-        register(EntityType.BLAZE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkAnyLightMonsterSpawnRules);
-        register(EntityType.BOGGED, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.BREEZE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkAnyLightMonsterSpawnRules);
-        register(EntityType.CAVE_SPIDER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.CHICKEN, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.COW, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.CREEPER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.DONKEY, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.ENDERMAN, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.ENDERMITE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Endermite::checkEndermiteSpawnRules);
-        register(EntityType.ENDER_DRAGON, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
-        register(EntityType.FROG, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Frog::checkFrogSpawnRules);
-        register(EntityType.GHAST, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Ghast::checkGhastSpawnRules);
-        register(EntityType.GIANT, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.GLOW_SQUID, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GlowSquid::checkGlowSquidSpawnRules);
-        register(EntityType.GOAT, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Goat::checkGoatSpawnRules);
-        register(EntityType.HORSE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.HUSK, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Husk::checkHuskSpawnRules);
-        register(EntityType.IRON_GOLEM, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
-        register(EntityType.LLAMA, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.MAGMA_CUBE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MagmaCube::checkMagmaCubeSpawnRules);
-        register(EntityType.MOOSHROOM, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MushroomCow::checkMushroomSpawnRules);
-        register(EntityType.MULE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.OCELOT, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Ocelot::checkOcelotSpawnRules);
-        register(EntityType.PARROT, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Parrot::checkParrotSpawnRules);
-        register(EntityType.PIG, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.HOGLIN, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Hoglin::checkHoglinSpawnRules);
-        register(EntityType.PIGLIN, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Piglin::checkPiglinSpawnRules);
-        register(
-            EntityType.PILLAGER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, PatrollingMonster::checkPatrollingMonsterSpawnRules
-        );
-        register(EntityType.POLAR_BEAR, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, PolarBear::checkPolarBearSpawnRules);
-        register(EntityType.RABBIT, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Rabbit::checkRabbitSpawnRules);
-        register(EntityType.SHEEP, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.SILVERFISH, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Silverfish::checkSilverfishSpawnRules);
-        register(EntityType.SKELETON, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(
-            EntityType.SKELETON_HORSE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SkeletonHorse::checkSkeletonHorseSpawnRules
-        );
-        register(EntityType.SLIME, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Slime::checkSlimeSpawnRules);
-        register(EntityType.SNOW_GOLEM, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
-        register(EntityType.SPIDER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.STRAY, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Stray::checkStraySpawnRules);
-        register(EntityType.STRIDER, SpawnPlacementTypes.IN_LAVA, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Strider::checkStriderSpawnRules);
-        register(EntityType.TURTLE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Turtle::checkTurtleSpawnRules);
-        register(EntityType.VILLAGER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
-        register(EntityType.WITCH, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.WITHER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.WITHER_SKELETON, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.WOLF, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Wolf::checkWolfSpawnRules);
-        register(EntityType.ZOGLIN, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkAnyLightMonsterSpawnRules);
-        register(EntityType.CREAKING, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.ZOMBIE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.ZOMBIE_HORSE, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ZombieHorse::checkZombieHorseSpawnRules);
-        register(
-            EntityType.ZOMBIFIED_PIGLIN,
-            SpawnPlacementTypes.ON_GROUND,
-            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-            ZombifiedPiglin::checkZombifiedPiglinSpawnRules
-        );
-        register(EntityType.ZOMBIE_VILLAGER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.CAT, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.ELDER_GUARDIAN, SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Guardian::checkGuardianSpawnRules);
-        register(EntityType.EVOKER, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.FOX, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Fox::checkFoxSpawnRules);
-        register(EntityType.ILLUSIONER, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.PANDA, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.PHANTOM, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
-        register(EntityType.RAVAGER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.SHULKER, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
-        register(EntityType.TRADER_LLAMA, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
-        register(EntityType.VEX, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.VINDICATOR, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        register(EntityType.WANDERING_TRADER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
-        register(EntityType.WARDEN, SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-    }
-
-    record Data(Heightmap.Types heightMap, SpawnPlacementType placement, SpawnPlacements.SpawnPredicate<?> predicate) {
-    }
-
-    @FunctionalInterface
-    public interface SpawnPredicate<T extends Entity> {
-        boolean test(EntityType<T> var1, ServerLevelAccessor var2, EntitySpawnReason var3, BlockPos var4, RandomSource var5);
-    }
-}
 ```
 中间一大部分每种生物的生成条件，分为三部分：
 
@@ -894,7 +771,7 @@ public interface SpawnPlacementTypes {
 
 ### 2.4.3 自然生成总结
 简化为以下伪代码：
-```
+```java
 如果原点方块不是红石导体：
 	j = 三组游走总生成数量
 	三组从原点出发的随机游走(互不干扰)：
@@ -915,14 +792,14 @@ public interface SpawnPlacementTypes {
 					&& 生成类型不是 misc(杂项)
 					&& (距离玩家 <= 生物的立即消失距离 || 能远离玩家生成(canSpawnFarFromPlayer))
 					&& 此生物依然在新位置的可生成列表中(canSpawnMobAt)
-					&& 通过此生物的SpawnPlacementsTypes检查
-					&& 通过此生物的SpawnPredicate的检查
+					&& 通过此生物的SpawnPlacements.Types 检查 (on_ground, in_water, in_lava, no_restrictions)
+					&& 通过此生物的SpawnPlacements.checkSpawnRules 的检查 (checkXxxSpawnRules)
 					&& 生成的生物碰撞箱不会被其它**方块**的碰撞箱阻塞
 				那么：
 					在缓存中生成此生物，偏航角随机(随机旋转)，俯仰角0度(平视)
 					如果(3)：
 						(距离玩家 <= 生物的立即消失距离 || 不会远离玩家消失(removeWhenFarAway))
-						&& 允许自然生成 
+						&& Mob.checkSpawnRules 
 						&& 生物碰撞箱不在液体中 
 						&& 生物碰撞箱没有被**实体**的碰撞箱阻塞
 					那么：

@@ -11,3 +11,6 @@ checkDrownedSpawnRules (不考虑刷怪笼，仅考虑自然生成)：
 	如果：bl && 不来自增援
 	那么(昏暗深水)：直接 return ture
 	否则(昏暗浅水或比较亮)：return 是河流或冻河 ？ bl && 1/15概率 : 1/40概率 && (当前y < 海平面63-5)
+
+溺尸增援生成条件：
+	return 此处含水 && 下方含水 && isDarkEnoughToSpawn (越暗越好)

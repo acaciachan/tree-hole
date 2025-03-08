@@ -4,7 +4,7 @@
 # deletion  :   删除的部分
 # modifications      :   key(左侧键)一样，但是value(右侧值)不一样
 
-ouput_original = False # 是否保留原始数据
+output_origin = False # 是否保留原始数据
 
 import os
 import json
@@ -52,7 +52,7 @@ def generate_comparison(old_data, new_data, output_original=True):
     }
     
     # 可选保留原始数据
-    if output_original:
+    if output_origin:
         result.update({
             "old_version": old_data,
             "new_version": new_data
