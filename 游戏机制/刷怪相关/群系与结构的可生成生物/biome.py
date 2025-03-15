@@ -3,7 +3,7 @@ import json
 import pandas as pd
 from collections import defaultdict
 
-output_count = True  # 控制是否显示数量
+output_count = True  # 是否显示成组生成数量范围
 output_zero_total_weight = True  # 是否显示没有任何刻生成生物的生物类别和生物群系
 
 categories = ["monster", "creature", "ambient", "water_ambient",
