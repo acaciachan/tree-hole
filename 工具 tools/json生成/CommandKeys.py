@@ -39,7 +39,6 @@ def convert_txt_to_json(input_folder, output_folder):
                 "messages": [
                     {
                         "version": 1,
-                        "enabled": True,
                         "string": cmd,
                         "delayTicks": 1
                     }

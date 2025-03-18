@@ -39,7 +39,6 @@
 /carpet fillLimit 20000000
 /carpet fillUpdates false
 /carpet flippinCactus true
-/carpet fluidDestructionDisabled true
 /carpet hopperCounters true
 /carpet hopperCountersUnlimitedSpeed true
 /carpet hopperNoItemCost true
@@ -49,15 +48,11 @@
 /carpet largeBarrel true
 /carpet maxSpongeRange 512
 /carpet maxSpongeSuck 100000000
-/carpet minecartFullDropBackport true
-/carpet minecartPlaceableOnGround true
 /carpet persistentLoggerSubscription true
 /carpet placementRotationFix true
 /carpet portalCreativeDelay 20
 /carpet repeaterHalfDelay true
 /carpet spawnChunksSize 0
-/carpet shulkerBoxCCEReintroduced true
-/carpet shulkerBoxContentDropBackport true
 /carpet stopCommandDoubleConfirmation true
 /carpet structureBlockDoNotPreserveFluid true
 /carpet structureBlockLimit 512
@@ -67,5 +62,5 @@
 /carpet tntDoNotUpdate true
 /carpet voidDamageAmount 1000
 /carpet voidDamageIgnorePlayer creative,spectator
-/carpet voidRelatedAltitude -1.0
+/carpet voidRelatedAltitude -16.0
 /carpet yeetOutOfOrderChatKick true
