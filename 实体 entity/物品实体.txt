@@ -73,9 +73,10 @@ if (!this.onGround() || this.getDeltaMovement().horizontalDistanceSqr() > 1.0E-5
 then tick
 翻译：落地&水平速度慢=平均每4t只有其中一个tick会运算
 
-jumpFactor 蜜块(0.5F)
-speedFactor 蜜块(0.4)，灵魂沙(0.4)
-friction 粘液块(0.8)，冰、浮冰、霜冰(0.98)，蓝冰(0.989)		
+
+jumpFactor 默认(1.0) 蜜块(0.5)
+speedFactor 默认(1.0) 蜜块(0.4)，灵魂沙(0.4)
+friction 默认(0.6) 粘液块(0.8)，冰、浮冰、霜冰(0.98)，蓝冰(0.989)		
 
 
 物品实体编号相关：
