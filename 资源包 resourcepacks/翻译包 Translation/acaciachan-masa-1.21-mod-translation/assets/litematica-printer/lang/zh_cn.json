@@ -24,7 +24,7 @@
     "litematica-printer.config.generic.comment.interactBlocks": "是否自动设置方块状态（如开关、方向等）",
 
     "litematica-printer.config.hotkeys.name.print": "打印",
-    "litematica-printer.config.hotkeys.name.togglePrintingMode": "切换打印模式",
+    "litematica-printer.config.hotkeys.name.togglePrintingMode": "打印模式 - 开关",
 
     "litematica-printer.config.hotkeys.prettyName.print": "执行打印",
     "litematica-printer.config.hotkeys.prettyName.togglePrintingMode": "切换打印模式",

@@ -48,3 +48,5 @@
 	穿刺5 + 激流3 + 耐久3：
 	/cenchant minecraft:trident with minecraft:impaling 5 with minecraft:riptide 3 with minecraft:unbreaking 3
 
+【鱼竿】：
+	/cenchant minecraft:fishing_rod with minecraft:luck_of_the_sea 3 with minecraft:lure 3 with minecraft:unbreaking 3
