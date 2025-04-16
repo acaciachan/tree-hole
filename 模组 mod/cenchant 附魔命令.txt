@@ -1,8 +1,8 @@
 工具：(精准和时运不能共存)
 	效率4(5) + 精准 + 耐久3：
-	/cenchant minecraft:diamond_ with minecraft:efficiency 4 with minecraft:silk_touch 1 with minecraft:unbreaking 3
+	/cenchant minecraft:diamond_pickaxe with minecraft:efficiency 4 with minecraft:silk_touch 1 with minecraft:unbreaking 3
 	效率4(5) + 时运3 + 耐久3：
-	/cenchant minecraft:diamond_ with minecraft:efficiency 4 with minecraft:fortune 3 with minecraft:unbreaking 3
+	/cenchant minecraft:diamond_pickaxe with minecraft:efficiency 4 with minecraft:fortune 3 with minecraft:unbreaking 3
 
 盔甲：
 	【帽子】
@@ -32,7 +32,7 @@
 【剑】：(横扫不能与锋利或杀手同时附魔)
 	锋利4 + 掠夺3 + 耐久3 - 击退：/cenchant minecraft:diamond_sword with minecraft:sharpness 4 with minecraft:looting 3 with minecraft:unbreaking 3 without minecraft:knockback *
 	亡灵5 + 掠夺3 + 耐久3 - 击退：/cenchant minecraft:diamond_sword with minecraft:smite 5 with minecraft:looting 3 with minecraft:unbreaking 3 without minecraft:knockback *
-	还需要横扫之刃3的附魔书：/cenchant minecraft:book with minecraft:sweeping_edge 3
+	还需要 横扫之刃3（+ 锋利4） 的附魔：/cenchant minecraft:diamond_sword with minecraft:sweeping_edge 3 without minecraft:knockback 2 without minecraft:fire_aspect 2
 
 
 
@@ -41,6 +41,8 @@
 	/cenchant minecraft:crossbow with minecraft:quick_charge 2 with minecraft:multishot 1 with minecraft:unbreaking 3
 	快速装填2(3) + 穿透4 + 耐久3：
 	/cenchant minecraft:crossbow with minecraft:quick_charge 2 with minecraft:piercing 4 with minecraft:unbreaking 3
+	还需要 快速装填2 的附魔书合成 快速装填3：
+	/cenchant minecraft:book with minecraft:quick_charge 2
 
 【三叉戟】：
 	穿刺5 + 忠诚3 + 引雷 + 耐久3：
@@ -50,3 +52,4 @@
 
 【鱼竿】：
 	/cenchant minecraft:fishing_rod with minecraft:luck_of_the_sea 3 with minecraft:lure 3 with minecraft:unbreaking 3
+e
