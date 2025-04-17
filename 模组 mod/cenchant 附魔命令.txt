@@ -1,4 +1,4 @@
-工具：(精准和时运不能共存)
+【工具】
 效率4(5) + 精准 + 耐久3（缺：效率5）
 /cenchant minecraft:diamond_pickaxe with minecraft:efficiency 4 with minecraft:silk_touch 1 with minecraft:unbreaking 3
 效率4(5) + 时运3 + 耐久3（缺：效率5）
