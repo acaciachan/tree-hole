@@ -1,16 +1,17 @@
-自然生成群系及其权重：
-	河流(river) 100/615 ≈ 1/6
-	溶洞(dripstone_caves) 95/610 ≈ 1/6
-	海洋类(xxx_ocean) 5/520 ≈ 1/100
-	冻河(frozen_river) 1/516 ≈ 1/500
-	其余不刷
-spawnPlacemnetType(in_water)：此处含水 && 上方不是红石导体
-checkDrownedSpawnRules (不考虑刷怪笼，仅考虑自然生成)：
-	bl = 此处含水 && 下方含水 && isDarkEnoughToSpawn (越暗越好)
+溺尸：
+	自然生成群系及其权重：
+		河流(river) 100/615 ≈ 1/6
+		溶洞(dripstone_caves) 95/610 ≈ 1/6
+		海洋类(xxx_ocean) 5/520 ≈ 1/100
+		冻河(frozen_river) 1/516 ≈ 1/500
+		其余不刷
+	spawnPlacemnetType(in_water)：此处含水 && 上方不是红石导体
+	checkDrownedSpawnRules (不考虑刷怪笼，仅考虑自然生成)：
+		bl = 此处含水 && 下方含水 && isDarkEnoughToSpawn (越暗越好)
 
-	如果：bl && 不来自增援
-	那么(昏暗深水)：直接 return ture
-	否则(昏暗浅水或比较亮)：return 是河流或冻河 ？ bl && 1/15概率 : 1/40概率 && (当前y < 海平面63-5)
+		如果：bl && 不来自增援
+		那么(昏暗深水)：直接 return ture
+		否则(昏暗浅水或比较亮)：return 是河流或冻河 ？ bl && 1/15概率 : 1/40概率 && (当前y < 海平面63-5)
 
-溺尸增援生成条件：
-	return 此处含水 && 下方含水 && isDarkEnoughToSpawn (越暗越好)
+	溺尸增援生成条件：
+		return 此处含水 && 下方含水 && isDarkEnoughToSpawn (越暗越好)
