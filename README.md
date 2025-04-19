@@ -5,6 +5,6 @@
 # 链接  
 原始链接(Github)：https://github.com/acaciachan/tree-hole  
 国内镜像(Gitee)：https://gitee.com/acaciachan/tree-hole  
-个人主页(bilibili): https://space.bilibili.com/15020053  
-Discord: acaciachan  
+个人主页(bilibili)：https://space.bilibili.com/15020053  
+Discord：acaciachan  
 QQ外裙：1043122565
