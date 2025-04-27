@@ -1,0 +1,66 @@
+/carpet antiSpamDisabled true
+
+/gamerule commandBlockOutput false
+/gamerule commandModificationBlockLimit 2000000000
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/gamerule doInsomnia false
+/gamerule doPatrolSpawning false
+/gamerule keepInventory true
+/gamerule sendCommandFeedback true
+/gamerule spawnChunkRadius 0
+
+/setworldspawn 0 8 0
+/difficulty hard
+/time set day
+/weather clear
+
+/carpet language zh_cn
+/carpet accurateBlockPlacement true
+/carpet antiCheatDisabled true
+/carpet antiSpamDisabled true
+/carpet blockPlacementIgnoreEntity true
+/carpet blockStateSyncing true
+/carpet carpets true
+/carpet chatMessageLengthLimitUnlocked true
+/carpet cleanLogs true
+/carpet commandManipulate ops
+/carpet creativeInstantTame true
+/carpet creativeNetherWaterPlacement true
+/carpet creativeNoClip true
+/carpet creativeNoItemCooldown true
+/carpet creativeOpenContainerForcibly true
+/carpet ctrlQCraftingFix true
+/carpet debugNbtQueryNoPermission true
+/carpet defaultLoggers mobcaps,tps,tickWarp,phantom,wanderingTrader
+/carpet enchantCommandNoRestriction true
+/carpet entityPlacementIgnoreCollision true
+/carpet entityTrackerInterval 1
+/carpet fillLimit 20000000
+/carpet fillUpdates false
+/carpet flippinCactus true
+/carpet hopperCounters true
+/carpet hopperCountersUnlimitedSpeed true
+/carpet hopperNoItemCost true
+/carpet hopperXpCounters true
+/carpet HUDLoggerUpdateInterval 1
+/carpet instantCommandBlock true
+/carpet largeBarrel true
+/carpet maxSpongeRange 512
+/carpet maxSpongeSuck 100000000
+/carpet persistentLoggerSubscription true
+/carpet placementRotationFix true
+/carpet portalCreativeDelay 20
+/carpet repeaterHalfDelay true
+/carpet spawnChunksSize 0
+/carpet stopCommandDoubleConfirmation true
+/carpet structureBlockDoNotPreserveFluid true
+/carpet structureBlockLimit 512
+/carpet syncServerMsptMetricsData true
+/carpet tickCommandCarpetfied true
+/carpet tiscmNetworkProtocol true
+/carpet tntDoNotUpdate true
+/carpet voidDamageAmount 1000
+/carpet voidDamageIgnorePlayer creative,spectator
+/carpet voidRelatedAltitude -16.0
+/carpet yeetOutOfOrderChatKick true

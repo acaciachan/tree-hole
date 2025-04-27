@@ -1,0 +1,68 @@
+# 振动频率列表
+|振动频率|振动种类|游戏事件|描述
+|1|脚步|minecraft:step|实体（不包括监守者）行走[^1][^2]
+|1|游泳|minecraft:swim|实体游泳
+|1|拍打|minecraft:flap|飞行的实体（例如蝙蝠）拍打翅膀
+|1|共振|minecraft:resonate_1|紫水晶块1级共振
+|2|弹射物击中|minecraft:projectile_land|弹射物击中某物
+|2|落地|minecraft:hit_ground|实体从高处落地[^1][^3]
+|2|溅起水花|minecraft:splash|实体浮出水面[^4]；船受到气泡柱的冲击、划桨声
+|2|共振|minecraft:resonate_2|紫水晶块2级共振
+|3|物品互动结束|minecraft:item_interact_finish|玩家收回钓鱼竿、使用骨粉、放下盾牌、关闭望远镜；玩家[仅BE]生物[仅JE]结束使用各种物品
+|3|弹射物发射|minecraft:projectile_shoot|射出弹射物[^1]
+|3|奏响乐器|minecraft:instrument_play|吹奏山羊角
+|3|共振|minecraft:resonate_3|紫水晶块3级共振
+|4|实体行动|minecraft:entity_action|劫掠兽咆哮；狼甩掉身上的水；嗅探兽刨挖种子；海龟挖开沙子；骆驼坐下、起身与冲刺；嘎枝切换活动状态；玩家攻击与嘎枝之心绑定的嘎枝[新增：JE 1.21.5]
+|4|鞘翅滑翔|minecraft:elytra_glide|用鞘翅滑翔
+|4|卸下装备|minecraft:unequip|卸下玩家、盔甲架穿戴的物品；村民交易展示、更换为非装备性[仅JE]物品、收回物品；女巫或流浪商人饮用药水；流浪商人饮用奶
+|4|共振|minecraft:resonate_4|紫水晶块4级共振
+|5|离开坐骑|minecraft:entity_dismount|乘客离开坐骑
+|5|装备|minecraft:equip|玩家穿戴物品；为盔甲架装备物品；村民交易展示、更换为装备物品[仅JE]
+|5|共振|minecraft:resonate_5|紫水晶块5级共振
+|6|骑上坐骑|minecraft:entity_mount|乘客骑上坐骑
+|6|实体互动|minecraft:entity_interact|对受虚弱效果影响的僵尸村民使用金苹果；通过喂食来治愈已驯服的狼；通过使用铁锭来治愈铁傀儡；给予熊猫食物；成功喂食其他绝大多数生物[仅JE]；给生物命名；使用水桶收集鱼、美西螈或蝌蚪；与各种实体互动
+|6|剪切|minecraft:shear|用剪刀剪断绊线、雕刻南瓜、收获蜜脾[^5]、移除雪傀儡的头[^5]、给绵羊剪毛[^5]、为哞菇和沼骸除菇[^5]以及修剪植物[仅BE]
+|6|共振|minecraft:resonate_6|紫水晶块6级共振
+|7|实体受伤|minecraft:entity_damage|实体（不包括监守者）受伤；实体（不包括盔甲架、监守者）死亡；所有船、矿车与物品实体[^3]的受伤与死亡；不死图腾生效
+|7|共振|minecraft:resonate_7|紫水晶块7级共振
+|8|饮用|minecraft:drink|玩家或流浪商人喝完玻璃瓶中的液体；玩家饮用奶和蜂蜜，使用不祥之瓶[需要检查基岩版源代码]
+|8|进食|minecraft:eat|玩家进食[^6]；动物吃草；熊猫持续进食[仅BE]；喂食马[^7]和骆驼；成功喂食其他绝大多数生物[仅BE]
+|8|共振|minecraft:resonate_8|紫水晶块8级共振
+|9|关闭容器|minecraft:container_close|箱子、陷阱箱、末影箱、木桶或潜影盒关闭；潜影贝关闭其外壳、关闭运输矿车或运输船
+|9|关闭方块|minecraft:block_close|关闭门、活板门或栅栏门
+|9|方块取消激活|minecraft:block_deactivate|关闭拉杆；按钮、绊线以及压力板回复原本的状态
+|9|分离方块|minecraft:block_detach|拆除有效绊线线路的绊线
+|9|共振|minecraft:resonate_9|紫水晶块9级共振
+|10|打开容器|minecraft:container_open|箱子、陷阱箱、末影箱、木桶、潜影盒、运输矿车或漏斗开启；潜影贝打开外壳
+|10|打开方块|minecraft:block_open|打开门、活板门或栅栏门
+|10|激活方块|minecraft:block_activate|打开拉杆；按钮、绊线以及压力板被激活；活塞伸出；发射器发射失败
+|10|连接方块|minecraft:block_attach|布置绊线形成有效绊线线路
+|10|引爆|minecraft:prime_fuse|TNT或苦力怕准备爆炸
+|10|奏响音符盒|minecraft:note_block_play|奏响音符盒
+|10|共振|minecraft:resonate_10|紫水晶块10级共振
+|11|方块变化|minecraft:block_change|把书放上讲台或雕纹书架；取下讲台或雕纹书架的书；把植物种入或取出花盆；点燃或熄灭营火与蜡烛[^5]；把蜡烛插在蛋糕上；大型垂滴叶倾斜；敲响钟；海龟蛋或嗅探兽蛋开裂；兔子啃食胡萝卜植株；玩家或狐狸采集甜浆果或发光浆果；与两种物品展示框中的物品互动；为重生锚充能；与堆肥桶交互；使用剪刀修剪植物[仅JE]；将耕地踩踏成泥土；饰纹陶罐晃动；使用染料改变炼药锅中的水的颜色[仅BE]；眼眸花转化；炼药锅因天气或滴水石锥增加一个液体等级[仅JE]
+|11|共振|minecraft:resonate_11|紫水晶块11级共振
+|12|破坏方块|minecraft:block_destroy|破坏方块[^5]以及末影人捡起方块[^8]
+|12|装起液体|minecraft:fluid_pickup|用玻璃瓶收集水、蜂蜜或龙息[^5]；用桶收集液体或细雪[^5]以及将液体从炼药锅中移除[^5]
+|12|共振|minecraft:resonate_12|紫水晶块12级共振
+|13|放置方块|minecraft:block_place|放置方块[^9]
+|13|放置液体|minecraft:fluid_place|炼药锅里增加一个液体等级（天气或滴水石锥也可触发）[仅BE]；用桶倒出液体[^5]，不包含放置细雪；使用水瓶将方块转化为泥巴
+|13|共振|minecraft:resonate_13|紫水晶块13级共振
+|14|放置实体|minecraft:entity_place|利用物品生成实体（如张贴画、使用刷怪蛋、使用生物桶[^10]、放置船）[^5]、唤魔者召唤出尖牙或恼鬼
+|14|雷击|minecraft:lightning_strike|闪电生成
+|14|传送|minecraft:teleport|末影人的瞬移、紫颂果的传送、潜影贝的传送
+|14|共振|minecraft:resonate_14|紫水晶块14级共振
+|15|实体死亡|minecraft:entity_die|实体（不包括监守者）死亡；盔甲架被敲掉
+|15|爆炸|minecraft:explode|TNT、苦力怕、床、重生锚、风弹或烟花火箭爆炸；风爆魔咒造成的爆炸
+|15|共振|minecraft:resonate_15|紫水晶块15级共振
+
+ [^1]: 潜行时会被忽略。
+ [^2]: 行走在羊毛或地毯上时会被忽略。
+ [^3]: 羊毛和地毯的物品实体会被忽略。
+ [^4]: 在Java版中，幽匿感测体不会区分浮漂钓到鱼和其他会导致溅起水花发出的振动，这是开发者有意为之的，见MC-207334。
+ [^5]: 对发射器也有效。
+ [^6]: 与蛋糕和碗装食物的互动会触发此事件。
+ [^7]: MC-213950
+ [^8]: 这不包含被流动的水破坏的方块（MC-207410），也不包含因其附着方块被移除而被破坏的红石线、红石中继器、红石比较器或任意种类的铁轨（MC-207411）。
+ [^9]: 这包含使用打火石或火焰弹生成火，由末影人或发射器放置方块，海龟和青蛙产卵，嘎枝之心放置树脂团以及由冰霜行者冻结方块[仅Java版]。
+ [^10]: 使用鱼桶繁殖美西螈并不会产生此信号，这是开发者有意为之的。

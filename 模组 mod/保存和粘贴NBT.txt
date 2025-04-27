@@ -1,0 +1,19 @@
+如何在litematica中保存/粘贴容器或实体？
+如何服务器使用容器预览等功能？
+
+投影保存容器和实体数据 & 容器预览 & 信息显示(infoView) ：
+有OP权限：
+客户端 tweakermore 打开“服务端数据同步(serverDataSyncer)”
+没有OP权限：
+客户端 tweakermore 打开“服务端数据同步(serverDataSyncer)”
+服务器 TIS carpet 设置 debugNbtQueryNoPermission 为 true
+
+投影粘贴容器和实体：
+服务器和客户端都安装 litematica server paster 即可直接用
+
+注意：
+1.13原版加入了按下 F3+i 就会将能放置正在注视的方块或实体的命令(/setblock 或 /summon)复制至剪贴板。
+这个功能利用的是一个原版提供的方块或实体的NBT获取接口，利用这个可以做到投影保存容器
+但是必须使用OP权限才能使用，tis carpet 的那个功能就是下放到普通玩家可以用。
+
+比较器像其他容器一样是方块实体！

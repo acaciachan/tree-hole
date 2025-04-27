@@ -1,0 +1,16 @@
+直接全选安装就行，下面的中文会因为无法识别而被忽略
+
+基础库：
+pip install numpy scipy
+绘图库：
+pip install matplotlib
+数据分析：
+pip install pandas openpyxl xlsxwriter
+
+jupyter lab：
+pip install jupyterlab
+pip install jupyterlab-language-pack-zh-CN
+启动方式：jupyter lab
+
+进度条：
+pip install tqdm

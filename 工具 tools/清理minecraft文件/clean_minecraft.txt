@@ -1,0 +1,21 @@
+logs
+crash-reports
+cache
+data
+downloads
+moddata
+.mixin.out
+.fabric
+servers.dat_old
+realms_persistence.json
+usercache.json
+usernamecache.json
+command_history.txt
+
+CustomSkinLoader
+irisUpdateInfo.json
+XaeroWaypoints_BACKUP*
+
+config\minihud
+config\inventoryprofilesnext
+- config\inventoryprofilesnext\inventoryprofiles.json

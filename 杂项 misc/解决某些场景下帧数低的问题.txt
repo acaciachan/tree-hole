@@ -1,0 +1,15 @@
+超高效率刷怪塔：
+	关闭粒子效果(以sodium为准)：
+		方块(方块摧毁，生物跌落与方块上)
+		气泡(水中的实体)
+		气泡柱(灵魂沙产生的)
+		烟雾(生物死亡)
+		传送门(猪人塔)
+
+活塞多的机器：
+	tweakermore里面启用“方块事件节流(blockEventThrottler)”
+	
+小天才喷射合成：
+	tweakeroo里面启用“实体渲染数量限制(tweakRenderLimitEntities)”
+		物品渲染数量上限(renderLimitItem)设置为4096
+		经验球渲染数量上限(renderLimitXPOrb)设置为1024

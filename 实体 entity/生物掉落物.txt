@@ -1,0 +1,84 @@
+生物死亡时 (net.minecraft.world.entity.LivingEntity#die)
+	
+	...
+	dropAllDeathLoot (掉落所有死亡战利品)
+	createWitherRose
+	...
+	
+	其中：
+	createWitherRose (死亡时掉落凋灵玫瑰)：
+		如果是被凋灵杀死
+			BlockPos = 死亡瞬间生物的方块坐标
+			if BlockPos = 空气 && 凋灵玫瑰canSurvive
+				放置凋灵玫瑰
+			else: 放置凋灵玫瑰的掉落物
+	
+	dropAllDeathLoot
+		if shouldDropLoot && GameRules.RULE_DOMOBLOOT :
+			dropFromLootTable：掉落 战利品表(正常概念理解的掉落物)
+			dropCustomDeathLoot：掉落 生物装备(主副手、四个盔甲、身体盔甲(马凯等)、鞍)
+		dropEquipment：掉落 生物的容器(箱子矿车、箱船、驴骡的箱子)
+		dropExperience：掉落 经验
+		(这都什么垃圾的函数命名？？？)
+	
+	dropFromLootTable
+		
+	
+	dropEquipment
+		
+	
+	dropExperience：
+	 if 经验没有被幽匿传感器吃掉
+		&& (总是掉落经验(只有玩家)
+			|| (近期被玩家伤害过 && 判断是否掉落经验 && GameRules.RULE_DOMOBLOOT)
+		):
+		生成拆分后的经验球(生物死亡的精确位置)
+		
+		*其中：
+			经验没有被幽匿传感器吃掉：!wasExperienceConsumed()
+			近期被玩家伤害过：lastHurtByPlayerTime > 0
+				被玩家攻击，或被玩家的狼攻击，都让生物重新开始100tick的倒计时(lastHurtByPlayerTime = 100)
+			总是掉落经验：isAlwaysExperienceDropper()
+				目前只有玩家为true，祈雨都是false
+			判断是否掉落经验：shouldDropExperience()
+				一般：成年体掉落经验，幼年生物不掉落经验。
+				特判：怪物(monster)和疣猪兽(Hoglin)的都掉落；蝌蚪都不掉落
+				
+			生成经验球：
+				getExperienceReward：
+					玩家：掉落7倍经验等级的经验值，最多掉落100经验
+					非玩家生物：总经验 = 基础经验 + 装备经验
+						基础经验(请查表，以下为经验)：
+							大部分怪物(Monster) = 5
+							BabyZombie(幼年僵尸类)：floor(2.5*大型的基础经验) 
+							史莱姆类(不同尺寸) = 1,2,4								
+							守卫者、烈焰人、唤魔者 = 10
+							劫掠兽、猪灵暴君 = 20
+							
+							村民类、蝌蚪、铁傀儡、蝙蝠 = 0
+							炽足兽 = 1~2
+							WaterAnimal(水生动物) = 1~3
+							Animal(动物) = 1~3
+								ChickenJockey(鸡骑士的鸡) = 10
+								Hoglin(疣猪兽) = 5
+							Piglin(猪灵) = 5
+							
+							凋零 = 50
+							末影龙 = 12000(首次)、500(水晶复活)
+
+							
+						装备经验(每个装备掉落1~3经验)：
+							这里的装备包含：
+								手持物品(HAND)：主手和副手
+								人形装备(HUMANOID_ARMOR)：从头到脚
+								动物盔甲(ANIMAL_ARMOR)：(狼铠、马凯，目前不会自然生成)
+								鞍(SADDLE)：鞍
+							
+							每一件装备都进行判断：
+								如果这件装备的掉落概率<=1，每件盔甲就能转化成1~3的经验
+								注意：这里的掉落概率不是真的掉落的概率
+									装备的掉落概率详见“难度”
+									
+				getExperienceValue：
+					把经验从高到低拆成某些倍数，优先拆出大的数值，再拆出小的，直到耗尽为止
+					倍数：2477, 1237, 617, 307, 149, 73, 37, 17, 7, 3, 1	

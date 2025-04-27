@@ -1,0 +1,12 @@
+isorender
+fabricshot
+pet owner
+command GUI button
+advanced xray
+durability viewer
+show durability
+inventory HUD+
+
+xaero minimap
+xaero worldmap
+iris

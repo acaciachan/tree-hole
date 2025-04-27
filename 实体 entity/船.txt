@@ -1,0 +1,30 @@
+获取船的状态:
+    private Boat.Status getStatus() {
+        Boat.Status status = this.isUnderwater();
+        if (status != null) {
+            this.waterLevel = this.getBoundingBox().maxY;
+            return status;
+        } else if (this.checkInWater()) {
+            return Boat.Status.IN_WATER;
+        } else {
+            float f = this.getGroundFriction();
+            if (f > 0.0F) {
+                this.landFriction = f;
+                return Boat.Status.ON_LAND;
+            } else {
+                return Boat.Status.IN_AIR;
+            }
+        }
+    }
+
+在水下(isUnderwater)
+船碰撞箱向上扩展1mm，把这个范围内碰到的的所有方块全部检查一遍：流体的水位高度是否大于船碰撞箱顶部+0.001m，如果大于那就是在水里。
+这个流体是否为水源决定着船到底是(UNDER_WATER)还是(UNDER_FLOWING_WATE)，仅仅是在水源里(UNDER_WATER)并不会停止继续遍历，但是如果遇到一个能浸没船的非水源(流动水)会立刻返回(UNDER_FLOWING_WATE)并停止继续查找。
+
+
+在水中(checkInWater)
+船碰撞箱向上扩展1mm，把这个范围内碰到的的所有方块全部检查一遍：如果是水，则记录高度，最后遍历完之后this.waterLevel为最高的水位(相对于船底部的高度)
+
+
+如果船不在水下，那么outOfControlTicks=0，如果在水下，outOfControlTicks++
+然后如果outOfControlTicks>=60，弹射乘客

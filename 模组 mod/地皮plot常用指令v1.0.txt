@@ -1,0 +1,45 @@
+/plot claim 领取当前所在的地皮
+/plot delete 删除地皮（注意，合并后的地皮会被全部删除，将4个地皮合并后使用指令会删除4个）
+/plot setowner <玩家id> 更换领地主人
+/plot visit <领地名> 前往某块地皮
+/plot kick <玩家id> 将玩家踢出领地
+/plot setbiome <biome> 设置生物群系
+/plot trust <玩家id> 给予某人永久地皮权限
+/plot add <玩家id> 给予某人临时地皮权限[当你在线时对方才拥有你地皮的权限]
+/plot deny <玩家id> 拉黑一名玩家
+/plot remove <玩家id> 重置某人在你地皮的权限
+/plot info <地皮id> 查看一块地皮的信息
+/plot list 列出所有地皮
+/plot merge <all|n|e|s|w> [removeroads] 使所在地皮和相邻地皮合并[需要同一主人]
+/plot unlink [createroads] 解除地皮合并
+/plot flag <set|remove|add|list|info> <flag> <value> 修改地皮设置
+/plot alias <set|remove> <别名> 修改领地别名
+/plot toggle titles 开启和关闭领地信息显示
+
+全部flag权限表
+https://github.com/IntellectualSites/PlotSquared/wiki/Plot-flags
+常用flag权限
+true/false类
+pve玩家可与生物交互
+pvp玩家可与玩家交互
+explosion爆炸权限
+liquid-flow流体流动
+block-burn方块着火
+block-ignition点火权限
+device-interact设备交互
+vehicle-break交通工具破坏
+vehicle-place交通工具放置
+vehicle-use交通工具使用
+animal-attack攻击动物
+animal-interact动物交互
+hostile敌对生物权限，其他和上面类似
+数字类
+mob-cap实体生成，后面的值是上限
+animal-cap动物生成，其他和上面类似（服务器禁止设置）
+hostile-cap敌对生物生成，其他和上面类似（服务器禁止设置）
+time 后面的值是时间
+feed 后面跟两个值 第一个是恢复间隔，单位是秒，第二个是每次恢复的值
+heal 后面跟两个值 第一个是恢复间隔，单位是秒，第二个是每次恢复的值4
+例/p flag set feed 1 20  #这个意思就是每秒恢复20格饱食度
+其他
+weather 后面跟rain sun thunder

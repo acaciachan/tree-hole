@@ -1,0 +1,16 @@
+获取工具：
+/give @s minecraft:diamond_pickaxe[minecraft:enchantments={levels:{"minecraft:efficiency":5,"minecraft:mending":1,"minecraft:silk_touch":1,"minecraft:unbreaking":3}}]
+
+无法破坏的标签
+/give @s diamond_pickaxe[unbreakable={}]
+/give @s diamond_sword[unbreakable={}]
+
+特殊方块：
+
+骑士：
+蜘蛛骑士：
+/summon spider ~ ~ ~ {Passengers:[{id:"skeleton",HandItems:[{id:"bow",count:1}]}]}
+骷髅马陷阱：
+/summon minecraft:skeleton_horse ~ ~ ~ {SkeletonTrap:1b}
+鸡骑士：
+/summon chicken ~ ~ ~ {Passengers:[{id:"zombie",IsBaby:1b}],IsChickenJockey:1b}

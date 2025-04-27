@@ -1,0 +1,569 @@
+{
+  "messages": [
+    {
+      "version": 1,
+      "string": "/carpet antiSpamDisabled true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault antiSpamDisabled true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule commandBlockOutput false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule commandModificationBlockLimit 2000000000",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule doDaylightCycle false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule doWeatherCycle false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule doInsomnia false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule doPatrolSpawning false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule keepInventory true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule sendCommandFeedback true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule spawnChunkRadius 0",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/setworldspawn 0 8 0",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/difficulty hard",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/time set day",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/weather clear",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet language zh_cn",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault language zh_cn",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet accurateBlockPlacement true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault accurateBlockPlacement true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet antiCheatDisabled true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault antiCheatDisabled true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet antiSpamDisabled true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault antiSpamDisabled true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet blockPlacementIgnoreEntity true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault blockPlacementIgnoreEntity true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet blockStateSyncing true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault blockStateSyncing true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet carpets true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault carpets true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet chatMessageLengthLimitUnlocked true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault chatMessageLengthLimitUnlocked true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet cleanLogs true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault cleanLogs true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet commandManipulate ops",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault commandManipulate ops",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet creativeInstantTame true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault creativeInstantTame true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet creativeNetherWaterPlacement true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault creativeNetherWaterPlacement true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet creativeNoClip true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault creativeNoClip true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet creativeNoItemCooldown true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault creativeNoItemCooldown true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet creativeOpenContainerForcibly true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault creativeOpenContainerForcibly true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet ctrlQCraftingFix true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault ctrlQCraftingFix true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet debugNbtQueryNoPermission true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault debugNbtQueryNoPermission true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet defaultLoggers mobcaps,tps,tickWarp,phantom,wanderingTrader",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault defaultLoggers mobcaps,tps,tickWarp,phantom,wanderingTrader",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet enchantCommandNoRestriction true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault enchantCommandNoRestriction true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet entityPlacementIgnoreCollision true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault entityPlacementIgnoreCollision true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet entityTrackerInterval 1",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault entityTrackerInterval 1",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet fillLimit 20000000",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault fillLimit 20000000",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet fillUpdates false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault fillUpdates false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet flippinCactus true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault flippinCactus true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet hopperCounters true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault hopperCounters true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet hopperCountersUnlimitedSpeed true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault hopperCountersUnlimitedSpeed true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet hopperNoItemCost true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault hopperNoItemCost true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet hopperXpCounters true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault hopperXpCounters true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet HUDLoggerUpdateInterval 1",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault HUDLoggerUpdateInterval 1",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet instantCommandBlock true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault instantCommandBlock true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet largeBarrel true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault largeBarrel true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet maxSpongeRange 512",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault maxSpongeRange 512",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet maxSpongeSuck 100000000",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault maxSpongeSuck 100000000",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet persistentLoggerSubscription true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault persistentLoggerSubscription true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet placementRotationFix true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault placementRotationFix true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet portalCreativeDelay 20",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault portalCreativeDelay 20",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet repeaterHalfDelay true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault repeaterHalfDelay true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet spawnChunksSize 0",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault spawnChunksSize 0",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet stopCommandDoubleConfirmation true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault stopCommandDoubleConfirmation true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet structureBlockDoNotPreserveFluid true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault structureBlockDoNotPreserveFluid true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet structureBlockLimit 512",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault structureBlockLimit 512",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet syncServerMsptMetricsData true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault syncServerMsptMetricsData true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet tickCommandCarpetfied true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault tickCommandCarpetfied true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet tiscmNetworkProtocol true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault tiscmNetworkProtocol true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet tntDoNotUpdate true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault tntDoNotUpdate true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet voidDamageAmount 1000",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault voidDamageAmount 1000",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet voidDamageIgnorePlayer creative,spectator",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault voidDamageIgnorePlayer creative,spectator",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet voidRelatedAltitude -16.0",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault voidRelatedAltitude -16.0",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet yeetOutOfOrderChatKick true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault yeetOutOfOrderChatKick true",
+      "delayTicks": 1
+    }
+  ]
+}

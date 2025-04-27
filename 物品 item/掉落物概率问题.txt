@@ -1,0 +1,4 @@
+常见掉落物掠夺加成：net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction#run
+	clamp(randomInt(a,b), 0, +inf) + randomInt(0, loot) = avg: (a+b+loot)/2
+稀有掉落物掠夺加成：net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition#test
+	提高1%的掉落率
