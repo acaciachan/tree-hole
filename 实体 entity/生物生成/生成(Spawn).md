@@ -161,47 +161,103 @@ Mob类(重点)：net.minecraft.world.entity.Mob#checkDespawn
     }
 ```
 
+细节解释：
+
+1. this.shouldDespawnInPeaceful()：
+	怪物(Monster)：true
+	恶魂，幻翼：true
+	史莱姆：return size > 0
+	猪灵：false
+	其它：false
+
+2. persistenceRequired
+	相关的方法：
+		isPersistenceRequired() { return this.persistenceRequired; }
+		setPersistenceRequired() { this.persistenceRequired = true; }
+
+	persistenceRequired
+		默认为false
+		以下情况会被设置为true：
+			
+			当生物(Mob)捡起掉落物
+			命名牌命名的的生物
+			
+			被驯服
+			繁殖的悦灵、美西螈、疣猪兽
+			蝌蚪方块生成的蝌蚪、蝌蚪长成的青蛙
+			
+			猪被雷劈后的僵尸猪灵
+			远古守卫者
+			陷阱马和陷阱骷髅
+			
+			村庄生成的猫
+			村民生成的女巫和僵尸村民
+			试炼刷怪笼生成的生物
+
+			结构怪物（世界生成的时候伴随生成的第一个生物）：
+				海底废墟生成的溺尸
+				女巫小屋伴随生成的第一个女巫和猫
+				林地府邸生成的怪物
+
+
+3. this.requiresCustomPersistence()
+	Mob：return this.isPassenger()
+		美西螈：this.isPassenger() || this.fromBucket()
+		末影人：this.isPassenger() || this.getCarriedBlock() != null
+		袭击相关生物：this.isPassenger() || this.getCurrentRaid() != null
+
+4. this.removeWhenFarAway(d)
+	Mob类生物默认为true
+	但有Mob类以下特例(override)：
+		1. 此类直接false，即不会过远消失：动物(Animal)、傀儡类、悦灵
+
+		2. 看条件消失
+		鸡：return this.isChickenJockey()
+		猫：return !this.isTame() && this.tickCount > 2400
+		豹猫：return !this.isTrusting() && this.tickCount > 2400
+		桶装鱼和美西螈：return !this.fromBucket() && !this.hasCustomName()
+		僵尸村民：return !this.isConverting() && this.villagerXp == 0
+		
+		3. 此类生物会因为正在进行的事情而获得持久存在的标签
+		疣猪兽：return !this.isPersistenceRequired()
+		猪灵：return !this.isPersistenceRequired()
+		坚守者：return !this.isPersistenceRequired()
+		
+		4. 正在参加袭击的生物、灾厄巡逻队不会消失
+		灾厄巡逻队：return !this.patrolling || d > 16384.0 (d是传进来的参数，表示距离最近玩家距离) 
+			袭击队伍：return this.getCurrentRaid() == null ? super.removeWhenFarAway(d) : false
+
+5. entityType.getCategory().getNoDespawnDistance()
+	return 32
+
+6. entityType.canSpawnFarFromPlayer()
+	true：动物类("creature")，杂项类("misc")，掠夺者(pillager)，潜影贝(shulker)
+	false：其余所有
+
+7. noActionTime
+	以下情况下会归零：
+		livingEntity 不免疫伤害而受伤 (来源：net.minecraft.world.entity.LivingEntity#hurtServer)
+		玩家(player)不免疫伤害而受伤 (来源：net.minecraft.world.entity.player.Player#hurtServer)
+
+		Mob 距离最近玩家距离小于32 (来源：net.minecraft.world.entity.Mob#checkDespawn)
+		Mob 满足 this.isPersistenceRequired() && this.requiresCustomPersistence() (来源：net.minecraft.world.entity.Mob#checkDespawn)
+		凋零 不在和平模式 (来源：net.minecraft.world.entity.boss.wither.WitherBoss#checkDespawn)
+		掠夺者(pillager) 在拉弩 (来源：net.minecraft.world.entity.monster.Pillager#onCrossbowAttackPerformed)
+		猪灵 在拉弩 (来源：net.minecraft.world.entity.monster.piglin.Piglin#onCrossbowAttackPerformed)
+		袭击者(Raider)在袭击中 (来源：net.minecraft.world.entity.raid.Raider#aiStep)
+
+	以下情况会增加：
+		Mob 每tick的ai运算会 noActionTime++ (来源：net.minecraft.world.entity.Mob#serverAiStep)
+		Monster 每tick，如果光照幻数>0.5，即实际亮度(主世界 <= 12, 下界 < 12)时，noActionTime += 2 (来源：net.minecraft.world.entity.monster.Monster#updateNoActionTime)
+
+	在 Mob 的 checkDespawn 里面，如果 ActionTime > 600tick(30s) 时，才有机会执行随机消失的代码
+
 分析生物的消失：
-
 1. 如果难度为和平模式，并且生物在和平难度下消失(shouldDespawnInPeaceful)，则直接消失。
-	
-	其中 shouldDespawnInPeaceful() 方法：
-
-		怪物(Monster)：true
-		恶魂，幻翼，史莱姆(size > 0)：true
-		猪灵：false
-		其它：false
 
 2. 如果生物因为各种原因带上了(setPersistenceRequired)持久属性，则不会消失，且noActionTime设置为0。
 
 3. 如果没有阻止消失的属性，距离最近玩家距离 d>128，且满足过远消失条件(removeWhenFarAway(d))，则生物消失。
-
-	其中 canSpawnFarFromPlayer 是Entity的属性: 
-
-		// true：动物类("creature")，杂项类("misc")，掠夺者(pillager)，潜影贝(shulker)
-		// false：其余所有
-	
-	而 removeWhenFarAway(d)方法是Mob类的属性，d为距离最近玩家距离：
-		Mob类生物默认为：true
-		
-		但有以下覆写(特判)：
-			1. 直接false，即不会过远消失：动物(Animal)、傀儡类、悦灵
-
-			2. 看条件消失
-			鸡：return this.isChickenJockey()
-			猫：return !this.isTame() && this.tickCount > 2400
-			豹猫：return !this.isTrusting() && this.tickCount > 2400
-			桶装鱼和美西螈：return !this.fromBucket() && !this.hasCustomName()
-			僵尸村民：return !this.isConverting() && this.villagerXp == 0
-			
-			3. 此类生物会因为正在进行的事情而获得持久存在的标签
-			疣猪兽：return !this.isPersistenceRequired()
-			猪灵：return !this.isPersistenceRequired()
-			坚守者：return !this.isPersistenceRequired()
-			
-			4. 正在参加袭击的生物、灾厄巡逻队不会消失
-			灾厄巡逻队：return !this.patrolling || d > 16384.0 (d是传进来的参数，表示距离最近玩家距离) 
-				袭击队伍：return this.getCurrentRaid() == null ? super.removeWhenFarAway(d) : false
 	
 4. 如果没有阻止消失的属性，则距离最近玩家距离d>32，且会过远消失(上文提到的removeWhenFarAway(d))，
 	
@@ -211,11 +267,7 @@ Mob类(重点)：net.minecraft.world.entity.Mob#checkDespawn
 
 	否则如果距离最近玩家距离d<32，noActionTime重置为0。
 
-5. 上文反复提及的noActionTime，表示生物在最近玩家距离内没有动作的时间，用于判断生物是否消失。
-
-	生物会因为各种行为甚至是受伤让noActionTime重置为0，否则每tick增加1或2(怪物在特定光照下)。
-
-6. 凋灵在和平模式而消失，否则非和平模式noActionTime设置为0；末影龙不会消失；潜影贝的子弹在和平模式也会消失。
+5. 凋灵在和平模式而消失，否则非和平模式noActionTime设置为0；末影龙不会消失；潜影贝的子弹在和平模式也会消失。
 
 ### 2.1.3 高度图(Heightmap)
 
