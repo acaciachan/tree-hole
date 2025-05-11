@@ -785,7 +785,7 @@ public interface SpawnPlacementTypes {
 	1. isValidSpawn (生物能否在这上面生成)：
 			
 			通用判定：方块上表面支撑形状完整 && 方块发光亮度 < 14
-			特判：
+			特判(无视通用判定)：
 				never (总是不能)：
 					无法破坏方块：基岩、屏障、
 					玻璃类：玻璃、染色玻璃、铜网、
@@ -793,7 +793,6 @@ public interface SpawnPlacementTypes {
 				always (总是能)：
 					两个上表面碰撞箱不完整的：灵魂沙、泥巴、
 					三个类光源方块：雕刻南瓜、南瓜灯、红石灯
-				
 				岩浆块：免疫火的所有生物(.fireImmune)
 				树叶：豹猫和鹦鹉
 				冰、霜冰：北极熊
