@@ -5,9 +5,9 @@ import csv
 with open('SpawnPlacements.txt', 'r') as file:
     content = file.read()
 
-# 使用正则表达式匹配所需内容
-pattern = r'register\(EntityType\.(\w+),\s*SpawnPlacementTypes\.(\w+),\s*Heightmap\.Types\.(\w+),\s*(\w+)::(\w+)\);'
-matches = re.findall(pattern, content)
+# 使用改进的正则表达式匹配跨行内容
+pattern = r'register\(\s*EntityType\.(\w+)\s*,\s*SpawnPlacementTypes\.(\w+)\s*,\s*Heightmap\.Types\.(\w+)\s*,\s*(\w+)::(\w+)\s*\);'
+matches = re.findall(pattern, content, re.DOTALL)  # 添加 re.DOTALL 支持跨行
 
 # 创建CSV文件并写入数据
 with open('SpawnPlacements.csv', 'w', newline='') as csvfile:
