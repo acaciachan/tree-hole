@@ -7,14 +7,13 @@
 		冻河(frozen_river) 1/516 ≈ 1/500 1只
 		其余不刷
 	
-	spawnPlacemnetType(in_water)：此处含水 && 上方不是红石导体
-	checkDrownedSpawnRules (不考虑刷怪笼，仅考虑自然生成)：
-		bl = 此处含水 && 下方含水 && isDarkEnoughToSpawn (越暗越好)
-
-		如果：bl && 不来自增援
-		那么(昏暗深水)：直接 return ture
-		否则(昏暗浅水或比较亮)：return 是河流或冻河 ？ bl && 1/15概率 : 1/40概率 && (当前y < 海平面63-5)
-
+	溺尸自然生成：
+		如果：此处含水 && 下方含水 && 上方不是红石导体 
+		（否则失败）那么：
+			如果：此处群系为河流或冻河 ？ 
+			那么return 1/15概率 && 此处含水 && isDarkEnoughToSpawn (越暗越好)
+			否则return 1/40概率 && (当前y < 海平面63-5)
+	
 	溺尸增援生成条件：
 		return 此处含水 && 下方含水 && isDarkEnoughToSpawn (越暗越好)
 
