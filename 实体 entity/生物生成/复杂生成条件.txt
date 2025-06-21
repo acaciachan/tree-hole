@@ -1,0 +1,25 @@
+溺尸：
+	溺尸：
+	自然生成群系及其权重：
+		河流(river) 100/615 ≈ 1/6 1只
+		溶洞(dripstone_caves) 95/610 ≈ 1/6 4只！！
+		海洋类(*_ocean) 5/520 ≈ 1/100 1只
+		冻河(frozen_river) 1/516 ≈ 1/500 1只
+		其余不刷
+	
+	溺尸自然生成：
+		如果：此处含水 && 下方含水 && 上方不是红石导体 
+		（否则失败）那么：
+			如果：此处群系为河流或冻河 ？ 
+			那么return 1/15概率 && 此处含水 && isDarkEnoughToSpawn (越暗越好)
+			否则return 1/40概率 && (当前y < 海平面63-5)
+	
+	溺尸增援生成条件：
+		return 此处含水 && 下方含水 && isDarkEnoughToSpawn (越暗越好)
+
+守卫者：
+	非和平 and (1/20概率 or 水下不可见天空) and 下方含水 and (此处含水 or 来自刷怪笼)
+	水下可见天空（canSeeSkyFromBelowWater(此方块)）：
+		如果：此方块>=海平面63，那么return canSeeSky(blockPos)
+		否则：
+		

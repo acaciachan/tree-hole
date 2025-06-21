@@ -1,0 +1,7 @@
+net.minecraft.world.entity.monster.Zombie.ZombieAttackTurtleEggGoal#ZombieAttackTurtleEggGoal
+
+
+僵尸寻找海龟蛋的范围由以下两部分组成：
+寻找形状：
+水平：切比雪夫距离24。即僵尸在方块中间时，范围为47x47
+垂直：Y 坐标偏移：-4, -3, -2, -1, 0, +1, +2（相对于僵尸所在的方块位置）。

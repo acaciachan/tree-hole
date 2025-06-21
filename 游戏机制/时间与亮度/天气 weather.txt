@@ -1,0 +1,57 @@
+i = 晴天计时器
+j = 雨天计时器
+k = 雷暴计时器
+
+时间循环
+advanceWeatherCycle():
+	i = 晴天计时器
+	j = 雨天计时器
+	k = 雷暴计时器
+	bl雷 = isThundering
+	bl雨 = isRaining
+
+	if i>0:
+		晴天部分
+		i--
+		j = bl雷 ? 0 : 1
+		k = bl雨 ? 0 : 1
+		bl雷 = false
+		bl雨 = false
+	else:
+		雷暴部分
+		if j > 0:
+			--j
+			if j == 0: isThundering = !isThundering
+		elif(isThundering):
+			j = Thunder_Duration(雷暴持续时长) = randomInt(3600, 15600) = 3分钟 ~ 13分钟 = 0.15 ~0.55 MC日
+		else:
+			j = Thunder_Delay(雷暴延时) = randomInt(12000, 180000) = 10分钟 ~ 150分钟 = 0.5 ~ 7.5 MC日
+		
+		```雨天部分
+		if k > 0:
+			--k
+			if k == 0: isThundering = !isThundering
+		elif(isRaining):
+			k = Rain_Duration(雨天持续时长) = randomInt(12000, 24000) = 10分钟 ~ 20分钟 = 0.5 ~ 1.0 MC日
+		else:
+			k = Rain_Delay(雨天延时) = randomInt(12000, 180000) = 10分钟 ~ 150分钟 = 0.5 ~ 7.5 MC日
+		
+		```更新天气
+		this.serverLevelData.setThunderTime(j);
+		this.serverLevelData.setRainTime(k);
+		this.serverLevelData.setClearWeatherTime(i);
+		this.serverLevelData.setThundering(bl雷);
+		this.serverLevelData.setRaining(bl雨);
+	
+	雷暴百分比(thunderLevel)(百分比，表示雷暴开始或结束的程度，每tick±1%直到100%或0%)
+	oThunderLevel = thunderLevel (上个tick的thunderLevel)
+	thunderLevel += isThundering ? +0.01 : -0.01
+	thunderLevel = clamp(, 0.00, 1.00)
+	
+	雨天百分比(rainLevel)(百分比，表示降雨开始或结束的程度，每tick±1%直到100%或0%)
+	oRainLevel = rainLevel (上个tick的rainLevel)
+	rainLevel += isRaining ? +0.01 : -0.01
+	rainLevel = clamp(, 0.00, 1.00)
+	
+	更新玩家某些变化的部分
+    broadcast...

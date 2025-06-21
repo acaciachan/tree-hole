@@ -1,0 +1,164 @@
+流体的流动：
+
+如果流体方块(仅水和岩浆，不包含气泡柱等含水方块)收到了NC更新(neighborChanged)，或者被放置，则会检查是否是“可传播的(shouldSpreadLiquid)”：
+
+“可传播的(shouldSpreadLiquid)”：
+	水：一定可传播
+	岩浆：如果会变成各种石头直接就变，不会变就是可传播。
+可传播的只是检查会不会刷石头用，除此之外能否真的流动不管。
+被认为是可传播的，才会添加计划刻，才会执行计划刻流动。
+
+getNewLiquid：获取某个位置将会形成的新的流体。
+	获取水平四周的流体
+	
+	如果四周水源个数超过1个，并且此时下方是solid方块或水源，则返回流体源
+	如果没有形成流体源，判断上方是否有与自己相同种类的流体，如果是的话，则返回对应8液位的流动流体
+	以上两个都不满足，周围最大液位减去传播衰减(getDropOff)得到k，则返回液位为k的对应流动流体或着空流体(k=0)
+
+getSpreadDelay：流体的计划刻延时。空流体为0，水为5，岩浆为10或30
+
+getDropOff：流体每传播一格的液位衰减数
+	水总是为1
+	岩浆在过热地区为1，否则为2
+
+获取对应的流体对象(流动的，流体源，桶装流体)：
+getFlowing: flowing_water, flowing_lava
+getSource: water, lava
+getBucket: water_bucket, lava_bucket
+
+
+流体tick：
+	如果不是流体源：
+		获取新的流体(getNewLiquid)
+		获取流动延时(getSpreadDelay)
+	
+		如果新流体为空流体，则放置空气；
+		如果新旧流体不一样，放置新的流体，然后创建计划刻(用于下次流动)；
+		如果新旧流体一样，什么也不发生。
+	
+	流体传播(spread)
+	
+
+流体传播 spread(ServerLevel serverLevel, BlockPos blockPos, BlockState blockState, FluidState fluidState):
+	if (当前流体不为空):
+		blockPos2,blockState2 = 下方方块;
+		if 可以向下流动(canMaybePassThrough):
+			FluidState fluidState3 = this.getNewLiquid(serverLevel, blockPos2, blockState2);
+			Fluid fluid = fluidState3.getType();
+			if (fluidState2.canBeReplacedWith(serverLevel, blockPos2, fluid, Direction.DOWN)
+				&& canHoldSpecificFluid(serverLevel, blockPos2, blockState2, fluid)) {
+				this.spreadTo(serverLevel, blockPos2, blockState2, Direction.DOWN, fluidState3);
+				if (this.sourceNeighborCount(serverLevel, blockPos) >= 3) {
+					this.spreadToSides(serverLevel, blockPos, fluidState, blockState);
+				}
+
+				return;
+			}
+		}
+
+		if (fluidState.isSource() || !this.isWaterHole(serverLevel, blockPos, blockState, blockPos2, blockState2)) {
+			this.spreadToSides(serverLevel, blockPos, fluidState, blockState);
+		}
+	}
+}
+
+
+canPassThrough: canMaybePassThrough && canHoldSpecificFluid
+
+canMaybePassThrough: 
+	return !this.isSourceBlockOfThisType(fluidState)
+            && canHoldAnyFluid(blockState2)
+            && canPassThroughWall
+
+
+
+
+水坑相关：
+	isHole(block)：
+		输入一个位置，调用isWaterHole判断此方块和下方方块是否构成水坑结构
+
+	isWaterHole(block, block2)：上下两个方块是否为水坑关系。
+		同时满足三个条件则是水坑：
+		能向下流过(canPassThroughWall)，同种流体，下方能容纳流体(canHoldFluid)
+
+
+容纳液体的方块：
+
+	LiquidBlockContainer：可以容纳液体的方块
+		一般来说，指的就是含水方块。因为相关的能否放入流体的逻辑中，任何尝试放入除了水以外(岩浆)的判断最终都是不能。
+
+	canPlaceLiquid：
+		普通含水方块：放入的是水，则能
+		半砖：单层放入水可以，不是水都不能；双层无论放入什么都不能
+		海草海带等必定含水的方块(含水为内禀属性)，放入任何液体都不能
+		屏障只有创造模式的玩家能放入水，其余模式玩家和发射器都不能
+
+	放水倒水相关(水桶、结构方块、双层半砖吃水相关)的函数有：
+	placeLiquid
+	pickupBlock
+
+能否放入流体相关：
+	canHoldFluid：能否容纳任意流体与此种流体
+	canHoldFluid(block2, getFlowing): canHoldAnyFluid && canHoldSpecificFluid
+
+	canHoldAnyFluid：可以放入流体的方块
+		含水方块，返回true
+		不含水，不阻挡运动，并且不是特定的几个方块，返回true
+		不含水并且阻挡运动的，或是不阻挡运动的特定的几个方块，返回false
+		
+
+	canHoldSpecificFluid：能否放入这种流体方块(“可以放进去”这个条件排除了屏障)
+	canHoldSpecificFluid(blockGetter, blockPos, blockState, fluid)  ? 是否能放进去这种流体 ：true
+
+
+流体能否流过相关：
+	canPassThrough(流体1，block1到block2，流动方向，流体2)：
+		canMaybePassThrough(direction，block1，block2) && canHoldSpecificFluid(block2)
+	
+	canMaybePassThrough(block1，direction，block2，流体属性)：
+		!this.isSourceBlockOfThisType(fluidState)
+            && canHoldAnyFluid(block2)
+            && canPassThroughWall(direction，block1，block2);
+		
+	canPassThroughWall(direction，block1，block2)
+		获取block1和block2的碰撞箱
+		如果block1或block2的碰撞箱为完整方块，返回false(无法流过界面)
+		如果block2和block2的碰撞箱为无碰撞箱，返回true(可以流过界面)
+		不是以上两种情况，则取两个方块的边界面合并(并集)：
+			如果是完整表面，则无法透过；不是完整面，则可以。
+			
+体素形状处理：
+	BooleanOp种类：
+		FALSE = false;
+		TRUE = true;
+		
+		OR = bl || bl2;
+		AND = bl && bl2;
+
+		NOT_OR = !bl && !bl2;	或非(都为false才输出true)
+		NOT_AND = !bl || !bl2;	与非(都为true才输出false)
+		
+		SAME = bl == bl2;		同或
+		NOT_SAME = bl != bl2; 	异或
+		
+		FIRST = bl;
+		SECOND = bl2;
+		NOT_FIRST = !bl;
+		NOT_SECOND = !bl2;
+
+		ONLY_FIRST = bl && !bl2;	只有第一个true，并且第二个false
+		ONLY_SECOND = bl2 && !bl;	只有第二个true，并且第一个false
+
+		CAUSES = !bl || bl2;		等效于NOT_ONLY_SECOND
+		CAUSED_BY = bl || !bl2;    	等效于NOT_ONLY_FIRST
+
+
+	joinUnoptimized：
+		返回两个VoxelShape按照指定规则合并后的形状
+		合并的规则可以是BooleanOp里面的
+	
+	joinIsNotEmpty：
+		判断两个VoxelShape按规则合并后是否为空
+		合并的规则可以是BooleanOp里面的
+	
+	

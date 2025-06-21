@@ -1,0 +1,56 @@
+怪物捡起物品实体：this.getBoundingBox().inflate(1, 0, 1)
+	悦灵：this.getBoundingBox().inflate(1, 0, 1)
+玩家触摸实体((捡起)物品实体、河豚、史莱姆、(捡起)箭和三叉戟、(吸收)经验等)：
+	自由状态：this.getBoundingBox().inflate(1, 1, 1)
+	乘客状态：最小外接玩家与载具碰撞箱的长方体，再inflate(1, 0, 1)
+漏斗矿车膨胀吸物品：this.getBoundingBox().inflate(0.25, 0, 0.25)
+物品实体互相合并：this.getBoundingBox().inflate(0.5, 0, 0.5)
+
+船拉客：this.getBoundingBox().inflate(0.2, -0.01, 0.2)
+矿车拉客：this.getBoundingBox().inflate(0.2, 0, 0.2)
+
+玩家攻击：手长直线距离3m，创造模式变长为5m
+普通生物攻击范围：net.minecraft.world.entity.Mob#getAttackBoundingBox
+	攻击盒初始大小：水平方向能“最小外接”攻击者和载具的碰撞箱，垂直方向“最小外接”攻击者碰撞箱
+	然后把上述碰攻击盒向四周膨胀 
+		DEFAULT_ATTACK_REACH = Math.sqrt(2.04F) - 0.6F ≈ 0.828m ≈ 13.25px
+	如果是劫掠兽，上述攻击盒水平方向收缩0.05m = 0.8px
+
+横扫范围：net.minecraft.world.entity.player.Player#attack
+	lastDamageSource: 记录实体最后一次受到的伤害来源。
+	lastDamageStamp: 记录实体最后一次受到伤害的时间戳。
+	autoSpinAttackTicks: 记录自动旋转攻击的剩余时间（以刻为单位）。
+	autoSpinAttackDmg: 记录自动旋转攻击的伤害值。
+	this:横扫范围内的实体之一；entity：被直接攻击的
+	
+	攻击成功与失败：
+		一定失败(无声音、无事件)：基础进展攻击力 <= 0 && 魔咒攻击力 = 0
+		免疫造成的失败(特殊声音)：基础攻击力 > 0 && (生物免疫此伤害 || 正在死亡)
+		冷却造成的失败(特殊声音)：基础攻击力 > 0 && 伤害未超出受攻击者正在的冷却时间内的历史最大伤害
+		除此之外都成功(成功声音)
+		
+	触发横扫的前置条件：
+	攻击者玩家：
+		1. 攻击成功
+		2. 攻击冷却度>90%
+		4. 攻击不为暴击 (例如跳砍)
+		5. 落地(onGround) (通常不能在载具上，不在攀爬，可以在水里)
+		6. 距离上个tick位移“不过大”(需要进一步看代码)
+	被横扫的实体：
+		被攻击实体碰撞箱四周膨胀1m，上下膨胀0.25m，与这个膨胀区域发生碰撞的实体满足下列条件都会被横扫攻击：
+			1. 直线距离攻击者玩家 < 3m，
+			2. 不是玩家的“盟友”(盟友包含：同队伍，被该玩家驯服的动物，与玩家产生联系的悦灵；另外唤魔者和恼鬼也是盟友关系)
+			3. Marker为true的盔甲架
+	
+			
+<1.17 getEntities 跨区段时每个区段的遍历顺序：
+for x in (-∞, +∞)
+    for z in 从小到大
+        for y in 从小到大
+            遍历当前区段实体（按照加入区段的顺序）
+
+>=1.17 getEntities 跨区段时每个区段的遍历顺序：
+for x in (-∞, +∞)
+    for z in 先 [0, +∞) 再 (-∞, 0)
+        for y in 先 [0, +∞) 再 (-∞, 0)
+            遍历当前区段实体（按照加入区段的顺序）

@@ -1,0 +1,17 @@
+游戏文件夹
+	server.dat 多人服务器列表
+	logs 客户端日志，会包含聊天记录、包含电脑环境信息、也可能包含服务器IP
+	crash-reports 同logs
+	config
+		inventoryprofilesnext (不知道一堆服务器ip命名的文件夹意义是什么)
+		litematica 每个服务器保存的选取等信息
+		minihud 每个服务器保存的配置
+	
+	小地图缓存类：
+	voxelmap
+	xaero
+		minimap
+		world-map
+	XaeroWaypoints
+	XaeroWaypoints_BACKUP*
+	XaeroWorldMap

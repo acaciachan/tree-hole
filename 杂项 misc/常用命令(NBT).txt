@@ -1,0 +1,5 @@
+无法破坏的标签
+/give @s diamond_pickaxe {Unbreakable:1b}
+/give @s diamond_sword {Unbreakable:1b}
+
+特殊方块：

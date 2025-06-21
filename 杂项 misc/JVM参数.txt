@@ -1,0 +1,4 @@
+PCL2默认：
+-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true
+代理：
+-DsocksProxyHost=127.0.0.1 -DsocksProxyPort=10086

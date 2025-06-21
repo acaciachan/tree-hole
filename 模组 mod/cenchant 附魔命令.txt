@@ -1,0 +1,69 @@
+【工具】（钻石工具附魔台上最高只能出效率4，下界合金比钻石强的一点点“被附魔能力”可以让下界合金工具直接附魔出效率5）
+效率4(5) + 精准 + 耐久3（缺：效率5）
+/cenchant minecraft:diamond_pickaxe with minecraft:efficiency 4 with minecraft:silk_touch 1 with minecraft:unbreaking 3
+/cenchant minecraft:netherite_pickaxe with minecraft:efficiency 5 with minecraft:silk_touch 1 with minecraft:unbreaking 3
+效率4(5) + 时运3 + 耐久3（缺：效率5）
+/cenchant minecraft:diamond_pickaxe with minecraft:efficiency 4 with minecraft:fortune 3 with minecraft:unbreaking 3
+/cenchant minecraft:netherite_pickaxe with minecraft:efficiency 5 with minecraft:fortune 3 with minecraft:unbreaking 3
+
+
+【帽子】
+保护4 + 水下呼吸3 + 水下速掘 + 耐久3（缺：荆棘3）
+/cenchant minecraft:chainmail_helmet with minecraft:protection 4 with minecraft:respiration 3 with minecraft:aqua_affinity * with minecraft:unbreaking 3
+
+【胸甲】
+保护4 + 耐久3 - 荆棘2（缺：荆棘3）
+/cenchant minecraft:diamond_chestplate with minecraft:protection 4 with minecraft:unbreaking 3 with minecraft:thorns 2
+保护4 + 耐久3（缺：荆棘3）
+/cenchant minecraft:diamond_chestplate with minecraft:protection 4 with minecraft:unbreaking 3 without minecraft:thorns *
+
+【裤子】：
+保护4 + 耐久3（缺：迅捷潜行3 + 荆棘3）
+/cenchant minecraft:diamond_leggings with minecraft:protection 4 with minecraft:unbreaking 3
+
+【鞋子】：
+保护4 + 深海探索者3 + 耐久3（缺：摔落缓冲4 + 荆棘3）
+/cenchant minecraft:diamond_boots with minecraft:protection 4 with minecraft:depth_strider 3 with minecraft:unbreaking 3
+保护4 + 耐久3（缺：冰霜行者2 + 摔落缓冲4 + 荆棘3）
+/cenchant minecraft:diamond_boots with minecraft:protection 4 without minecraft:depth_strider 3 with minecraft:unbreaking 3
+补充：摔落缓冲4
+/cenchant minecraft:diamond_boots with minecraft:feather_falling 4 without minecraft:protection * without minecraft:blast_protection * without minecraft:fire_protection * without minecraft:projectile_protection *
+
+
+
+【弓】：力量4(5) + 击退2 + 火矢 + 无限 + 耐久3（缺：力量4）
+/cenchant minecraft:bow with minecraft:power 4 with minecraft:punch 2 with minecraft:flame 1 with minecraft:infinity 1 with minecraft:unbreaking 3
+
+【剑】：(建议用钻石剑，因为下界合金剑容易带上击退和火焰附加)(横扫不能与锋利或杀手同时附魔)
+锋利4 + 横扫之刃3 + 掠夺3 + 耐久3 （- 击退 - 火焰附加）（缺：锋利5）
+/cenchant minecraft:diamond_sword with minecraft:sharpness 4 with minecraft:sweeping_edge 3 with minecraft:looting 3 with minecraft:unbreaking 3 without minecraft:knockback * without minecraft:fire_aspect *
+亡灵5 + 横扫之刃3 + 掠夺3 + 耐久3 （- 击退 - 火焰附加）
+/cenchant minecraft:diamond_sword with minecraft:smite 5 with minecraft:sweeping_edge 3 with minecraft:looting 3 with minecraft:unbreaking 3 without minecraft:knockback * without minecraft:fire_aspect *
+补充：锋利4(方便融合成锋利5)
+/cenchant minecraft:diamond_sword with minecraft:sharpness 4 without minecraft:knockback 2 without minecraft:fire_aspect 2
+
+
+
+【弩】：
+快速装填2(3) + 多重射击 + 耐久3（缺：快速装填3）
+/cenchant minecraft:crossbow with minecraft:quick_charge 2 with minecraft:multishot 1 with minecraft:unbreaking 3
+快速装填2(3) + 穿透4 + 耐久3（缺：快速装填3）
+/cenchant minecraft:crossbow with minecraft:quick_charge 2 with minecraft:piercing 4 with minecraft:unbreaking 3
+补充：快速装填2
+/cenchant minecraft:book with minecraft:quick_charge 2
+
+【三叉戟】：
+穿刺5 + 忠诚3 + 引雷 + 耐久3：
+/cenchant minecraft:trident with minecraft:impaling 5 with minecraft:loyalty 3 with minecraft:channeling 1 with minecraft:unbreaking 3
+穿刺5 + 激流3 + 耐久3：
+/cenchant minecraft:trident with minecraft:impaling 5 with minecraft:riptide 3 with minecraft:unbreaking 3
+
+【鱼竿】：
+饵钓3 + 海之眷顾3 + 耐久3
+/cenchant minecraft:fishing_rod with minecraft:luck_of_the_sea 3 with minecraft:lure 3 with minecraft:unbreaking 3
+
+【重锤】：
+致密5 + 耐久3（缺：风暴3 + 火焰附加2）
+/cenchant minecraft:mace with minecraft:density 5 with minecraft:unbreaking 3
+破甲4 + 耐久3（缺：风暴3 + 火焰附加2）
+/cenchant minecraft:mace with minecraft:breach 4 with minecraft:unbreaking 3

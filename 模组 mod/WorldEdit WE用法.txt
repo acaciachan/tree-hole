@@ -1,0 +1,89 @@
+标签类：
+	#existing 非空气
+	#solid solid方块
+
+	#clipboard 剪切板
+	#clipboard@[2,0,1] 剪切板偏移
+
+	#region #sel #selection 选区(运行指令时)
+	#dregion #dsel #dselection 选区(总是当前)
+	
+方块标签：
+	##slabs 半砖类，默认状态
+	##*slabs 半砖类，所有状态
+		种类：slabs,wool,carpets,planks...
+
+标签类：
+	##c:
+	##minecraft:
+	##color:
+	##material:
+
+随机状态：
+	*observer 侦测器，随机状态
+
+保留状态：
+	粗略模式（^[state=value]） 有此状态并与给定状态相同，或没有此状态的方块
+	严格模式（^=[state=value]） 有此状态并与给定状态相同
+	
+	//replace acacia_stairs ^cherry_stairs
+	//replace ##stairs ^cherry_stairs
+	//replace observer ^piston[facing=down]
+	//replace observer ^[facing=down]
+	//set ^[waterlogged=false]
+	
+偏移：（选区应该选目标位置而不是起始位置）
+	>piston,sticky_piston (粘性)活塞的上方
+	<<<##carpets 地毯下方三格 (三格小于)
+	>grass_block 草方块上方（一个大于）
+否定：!...（后面可以接上任意内容）
+
+
+无百分比：obsidian,stone
+有百分比：5%diamond_ore,95%dirt
+
+特殊：
+	//set spawner|skeleton
+	//set player_head|acaciachan
+	//set cherry_sign[...]|Line1|Line2...
+
+
+/clearclipboard
+//sel list 选区帮助
+
+//copy -m 方块
+只复制某种方块，剪切板里也只会有这些方块
+
+//paste
+-o 粘贴在原始位置
+-s 粘贴后，选区选中粘贴后的位置
+-n 不粘贴，只选中粘贴后的位置
+
+//move
+//stack
+
+-a 不包括空气
+-e 包括实体
+-b 包括生物群系
+-s 同时移动选区
+-m B 只操作B方块
+
+//size 计算选区尺寸
+-c 作用于剪切板
+
+//count xxx[...] 统计某方块数量
+
+//distr 方块分布
+-c 作用于剪切板
+-d 会对不同状态的方块进行区分
+-p 分页
+
+
+
+/biomelist [-p <页面>]
+/biomeinfo 
+	-p 当前所在
+	-t 注释方块
+//setbiome
+	-p 当前坐标
+	-t 注释坐标
