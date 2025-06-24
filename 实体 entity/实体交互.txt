@@ -5,7 +5,12 @@
 	乘客状态：最小外接玩家与载具碰撞箱的长方体，再inflate(1, 0, 1)
 漏斗矿车膨胀吸物品：this.getBoundingBox().inflate(0.25, 0, 0.25)
 物品实体互相合并：this.getBoundingBox().inflate(0.5, 0, 0.5)
-
+经验球互相合并：
+	发起合并条件：tickCount % 20 == 1
+	寻找范围：this.getBoundingBox().inflate(0.5, 0.5, 0.5)
+	合并要求：经验值相等，实体编号id差值是40的倍数
+	结果：发起合并的吞掉另一个，age取两者最小值
+	
 船拉客：this.getBoundingBox().inflate(0.2, -0.01, 0.2)
 矿车拉客：this.getBoundingBox().inflate(0.2, 0, 0.2)
 
