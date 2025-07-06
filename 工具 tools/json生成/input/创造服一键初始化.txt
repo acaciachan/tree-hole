@@ -10,7 +10,6 @@
 /gamerule sendCommandFeedback true
 /gamerule spawnChunkRadius 0
 
-/setworldspawn 0 8 0
 /difficulty hard
 /time set day
 /weather clear
