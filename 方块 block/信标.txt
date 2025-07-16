@@ -1,0 +1,88 @@
+信标tick：
+
+	lastCheckY：当前正在检查的高度
+	checkingBeamSections： 当前正在检查临时存储的光束段列表
+	blockPos2：正在检查的方块
+	
+	如果 lastCheckY 低于信标
+		checkingBeamSections 重置为空列表
+		lastCheckY = 信标坐标y - 1
+	否则：
+		blockPos2 = 信标位置的 lastCheckY + 1 高度的方块
+	
+	BeaconBeamOwner.Section section = checkingBeamSections为空 ? null : checkingBeamSections的最后一个元素
+	
+	最多尝试10次，直到 blockPos2 <= 世界表面高度图：
+		blockState2 = blockPos2
+		如果 blockState2 为信标染色方块（染色玻璃类）：
+			n = blockState2的颜色数字
+			如果：checkingBeamSections.size() <= 1
+				section = BeaconBeamOwner.Section(n)
+				checkingBeamSections.add(section)
+			否则如果：section != null
+				如果：n == section.getColor()
+					section.increaseHeight()
+				否则：
+					section = new BeaconBeamOwner.Section(ARGB.average(section.getColor(), n));
+					checkingBeamSections.add(section);
+		否则blockState2不为信标染色方块：
+			如果：section = null || blockState2的遮光度 >=15 && blockState2不是基岩
+				checkingBeamSections.clear();
+				lastCheckY = 世界表面;
+				打断for循环
+			section.increaseHeight()
+	
+	如果此gametick整除80，那么：
+		如果 信标有光柱：
+			检测底座，返回信标等级（0~4）
+		
+		如果 信标等级 > 0 && beamSections不为空 ：
+			给玩家添加效果：
+				距离 d = 层数 * 10 + 10 m
+				时间 t = (9+层数*2)*20 tick = 9+层数*2 秒
+				j = (信标等级 >= 4 && 主效果和副效果相同) ? 1 :0
+				
+				方形范围：
+					信标的1x1x1碰撞箱 -> 六方向膨胀d -> 向上膨胀“维度高度(在“维度.json里”)”
+				
+				对能碰到方形范围的每个玩家：
+					添加主效果，时长为t，等级为j（0为一级，1为二级，）
+					如果 信标等级>=4 并且副效果存且与主效果不同：
+						添加副效果，时长为t，等级为0（一级）
+			广播声音
+	
+	如果lastCheckY >= l
+		lastCheckY = 维度最低y(0或-64) - 1
+		bl = 之前的信标levels(存储于o)是否大于0
+		beamSections = checkingBeamSections
+		bl2 = 现在信标levels是否大于0
+		
+		如果 之前为0 && 现在大于零 ：
+			播放效果（BEACON_ACTIVATE）
+		否则如果 之前大于0 && 现在为0 ：
+			播放声音（BEACON_DEACTIVATE）
+
+检查底座：
+	
+
+
+总结：
+	1.	每当gametime整除80时：
+		检查底座，根据底座层数设置信标等级
+		给玩家添加效果：
+			距离 d = 层数 * 10 + 10 m
+			时间 t = (9+层数*2)*20 tick = 9+层数*2 秒
+			j = (信标等级 >= 4 && 主效果和副效果相同) ? 1 :0
+			
+			方形范围：
+				信标的1x1x1碰撞箱 -> 六方向膨胀d -> 向上膨胀“维度高度(在“维度.json里”)”
+			
+			对能碰到方形范围的每个玩家：
+				添加主效果，时长为t，等级为j（0为一级，1为二级，）
+				如果 信标等级>=4 并且副效果存且与主效果不同：
+					添加副效果，时长为t，等级为0（一级）
+	2.	检查光柱相关：
+		2.1	检查范围是从信标位置到高度图的世界表面
+		2.2 每次tick最多检查10个方块，检查一个就向上移动一格，直到检查到世界高度会重新开始检查
+		2.3 遇到染色方块混色，遇到遮光度>=15的方块（除了基岩）也会导致终止，重新开始检查
+			这提示我们如果就在信标上方10m内放置遮光方块，信标下次tick就能反应的过来
