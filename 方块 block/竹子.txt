@@ -1,0 +1,80 @@
+竹笋：BambooSaplingBlock
+竹子：BambooStalkBlock
+
+竹笋和竹子的canSurvive：
+	下方方块为BlockTags.BAMBOO_PLANTABLE_ON：
+		BlockTags.SAND：沙子、红沙、可以沙子
+		BlockTags.DIRT：泥土、草方块、灰化土、砂土、菌丝体、缠根泥土、苔藓块、苍白苔藓块、泥巴、沾泥红树根
+		竹子、竹笋、砂砾、可疑砂砾
+
+竹笋：
+	无状态
+	
+	竹笋randomTick：
+		如果：1/3概率 and 上方为空气 and 原始亮度>=9
+		那么：growBamboo
+
+	竹笋growBamboo：
+		上方放置一个竹子[leaves=small]
+
+	竹笋被更新：
+		如果无法存活，那么返回空气
+		否则：
+			如果：来自下方的方块更新 and 下方为竹子
+			那么：变成默认状态的竹子
+	
+	可以被骨粉isValidBonemealTarget：return 上方为空气？
+	骨粉效果performBonemeal：growBamboo
+	
+竹子：
+	竹子状态：
+		age = 0(细), 1(粗)
+		leaves = none(无叶子), small(少量叶子), large(大量叶子)
+		stage = 0(可以生长), 1(终止生长，无法生长)
+	
+	竹子获取状态getStateForPlacement：
+		如果含水或竹子无法在此处存活，那么无法生长(return null)
+		否则：
+			如果下方为竹笋，那么bamboo[age=0]
+			否则如果下方为竹子[age=i]，那么bamboo[age=i]
+			否则如果上方为竹子[age=i]，那么bamboo[age=i]
+			否则就是竹笋
+	
+	可以被骨粉isValidBonemealTarget：
+		return 当前整段竹子数量 < 16 and 顶端竹子[stage=1]
+		
+	骨粉效果performBonemeal：
+		尝试(随机)1~2次:
+			如果：当前竹子总高度 >= 16 or 当前顶端竹子[stage=1] or 当前顶端竹子上方不是空气
+			那么：终止
+			否则：(当前竹子总高度 < 16 and 当前顶端竹子[stage=0] and 当前顶端竹子上方是空气)
+				growBamboo(i=当前竹子总高度)
+	
+	竹子能否被随机刻isRandomlyTicking：
+		return stage=0 ?
+	
+	竹子随机刻randomTick：（注意：只有处于顶端的竹子才能接受随机刻）
+		如果：当前竹子总高度 < 16 and 当前顶端竹子[stage=0] and 当前顶端竹子上方是空气
+		那么：growBamboo(i=当前竹子总高度)
+	
+	竹子生长growBamboo(i)：
+		如果i>=1：
+			如果：下方为竹子 or 下方方块[leaves=none]，
+				那么BambooLeaves=small
+			否则如果：下方为竹子 or 下方方块[leaves=small]
+				那么：BambooLeaves=large
+					如果下方第二个方块为竹子
+					那么：下方第一个竹子改为[leaves=small]，下方第二个竹子改为[leaves=none]
+		如果：此竹子[age≠1] and 下方第二个方块不为竹子，那么BambooAge=0，否则为1
+		如果：(i<11 or 1/4概率) and i≠15，那么BambooStage=0，否则为1
+	
+总结分析：
+1.	只有竹笋或顶端的竹子才会接受随机刻，并有1/3的概率生长
+2. 	当竹子从3m变成4m的时候，age会从0变成1，也就是变粗了，即使割掉重新生长也无法变细
+3. 	当竹子总高度为1~10时，长出的顶端竹子stage总为0
+	总高度为11~14时，长出的顶端竹子有1/4概率stage为1，造成下次无法接受随机刻生长
+	总高度为15时，长出的顶端竹子stage一定为1，造成下次无法生长而停留在16高度
+	因此竹子的高度为12~16
+4.	每次竹子生长，长出的新竹子叶子是比下方竹子的叶子更多，并且顺便退化下方的叶子为比自己更少的叶子，
+	最终规律就是整段竹子只会在顶端两个不为none
+				

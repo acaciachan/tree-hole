@@ -1,0 +1,23 @@
+数字	拉丁语前缀	希腊语前缀	示例词汇
+1	uni-	mono-	unicycle（独轮车）, monopoly（垄断）
+2	bi-/du-	di-/dy-	bicycle（自行车）, dichotomy（二分法）
+3	tri-	tri-	triangle（三角形）, trilogy（三部曲）
+4	quadri-/quadru-	tetra-	quadrilateral（四边形）, tetragon（四角形）
+5	quinque-/quint-	penta-	quintet（五重奏）, pentagon（五边形）
+6	sex-/sext-	hexa-	sextet（六重奏）, hexagon（六边形）
+7	sept-	hepta-	septet（七重奏）, heptagon（七边形）
+8	octo-/oct-	octa-/octo-	octopus（章鱼）, octagon（八边形）
+9	novem-/non-	ennea-	nonagon（九边形）*（拉丁语较少用）
+10	deci-/deca-	deca-	decade（十年）, decathlon（十项全能）
+11	undeca-	undecagon（十一边形）
+12	dodeca-	dodecahedron（十二面体）
+20	viginti- / icosa-	icosahedron（二十面体）
+100	centi- / hecto-	century（世纪）, hectogram（百克）
+1000	milli- / kilo-	millennium（千年）, kilogram（千克）
+
+半/部分：
+semi-（拉丁，如 semicircle 半圆）
+hemi-（希腊，如 hemisphere 半球）
+多/大量：
+multi-（拉丁，如 multilingual 多语言）
+poly-（希腊，如 polygon 多边形）
