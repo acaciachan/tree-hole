@@ -1,12 +1,43 @@
-getStatus()：
+获取地面摩擦力 getGroundFriction()：
+	AABB = (船底部-0.001 ~ 船底部)的碰撞箱区域
+	计算扫描范围 = 检测盒扩展1格
+
+	总摩擦值 = 0
+	接触方块数 = 0
+
+	for x in 扫描范围:
+	for z in 扫描范围:
+	  计算边界权重 = (x边界?1:0) + (z边界?1:0)
+	  
+	  if 非内部区域(边界权重 != 2):
+		for y in 扫描范围:
+		  if 非顶部/底部边界:
+			获取方块位置
+			获取方块状态
+			
+			if 不是睡莲 and 与船底碰撞:
+			  总摩擦值 += 方块摩擦值(getBlock().getFriction())
+			  接触方块数++
+
+	return (接触方块数 > 0) ? 总摩擦值/接触方块数 : 0
+	
+	其中方块摩擦力：
+	默认：0.6
+	粘液块：0.8
+	冰、浮冰、霜冰：0.98
+	蓝冰：0.989
+
+获取船的状态 getStatus()：
 	在水下（UNDER_FLOWING_WATER, UNDER_WATER）：
-		遍历所有船能碰到的方块，判断是否存在：
+		AABB = (船顶部 ~ 船顶部+0.001)的碰撞箱区域
+		遍历AABB能碰到的方块，判断是否存在：
 			船碰撞箱maxY + 0.001 < 某个水的水位
 		如果满足，设置此状态，并把船的水位(this.waterLevel)设置为碰撞箱maxY
 		(两个状态流水的优先级大于水源)
 		
 	部分浸水状态（IN_WATER）：
-		遍历所有船能碰到的方块，判断是否存在：
+		AABB = (船底部 ~ 船底部+0.001)的碰撞箱区域
+		遍历AABB能碰到的方块，判断是否存在：
 			船碰撞箱minY < 某个水的水位高度
 		另外船的水位(this.waterLevel) = max(所有水的水位高度)
 		若未接触到水，船的水位(this.waterLevel) = -Double.MAX_VALUE
@@ -81,17 +112,24 @@ getStatus()：
             重置桨叶角度()
     
     # === 10. 实体交互 ===
-    获取周围碰撞实体()
-    for 实体 in 碰撞列表:
-        if 可被推挤:
-            if 服务端 and 船有空位 and 实体可上船:
-                实体上船()
-            else:
-                推挤实体()
+    获取范围内实体：碰撞箱.inflate(0.2, -0.01, 0.2), EntitySelector.pushableBy(this)
+	如果：获取到的实体列表非空 and 船张不是玩家
+	那么：for 获取到的实体列表：
+		如果此实体没有乘客，那么：
+			如果:
+				船的乘客数量 < 此船的最大乘客数量
+				and 此实体不是乘客
+				and 实体宽度小于船
+				and 实体是livingEntity(玩家、盔甲架、生物Mob)
+				and 实体不是WaterAnimal(各种桶装类)
+				and 实体不是玩家
+				and 实体不是嘎吱
+			那么：拉客上船
+		否则：push(此实体)
+
+船推挤实体 push()：
 	
 	
-
-
 获取船的状态:
     private Boat.Status getStatus() {
         Boat.Status status = this.isUnderwater();

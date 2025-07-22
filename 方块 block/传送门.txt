@@ -61,8 +61,11 @@ changeDimension
 findDimensionEntryPoint
 moveTo
 
-传送后的冷却时间：玩家10t(=0.5s)，非玩家300t(=15s)
-
+传送后的冷却时间：
+	玩家：10t = 0.5s，
+	载具(船和矿车)：10t = 0.5s
+	投掷物：2t = 0.1s
+	其他实体：300t = 15s
 
 
 
