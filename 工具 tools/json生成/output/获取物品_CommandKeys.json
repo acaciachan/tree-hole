@@ -1,0 +1,19 @@
+{
+  "messages": [
+    {
+      "version": 1,
+      "string": "/give @s minecraft:skull 1 3 {SkullOwner:\\\"acaciachan\\\"}",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/give @s minecraft:player_head{SkullOwner:\\\"acaciachan\\\"}",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/give @s minecraft:player_head[profile\\u003d{name:\\\"acaciachan\\\"}]",
+      "delayTicks": 1
+    }
+  ]
+}

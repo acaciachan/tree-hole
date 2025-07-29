@@ -14,17 +14,19 @@
 	https://zh.minecraft.wiki/w/%E9%99%84%E9%AD%94%EF%BC%88%E7%89%A9%E5%93%81%E4%BF%AE%E9%A5%B0%EF%BC%89#%E4%BF%AE%E6%AD%A3%E9%99%84%E9%AD%94%E7%AD%89%E7%BA%A7%E8%8C%83%E5%9B%B4
 
 附魔修正等级(k)：
-	k = (l + 1 + randInt(A\4+1) + randInt(A\4+1))
+	k = (l + 1 + randInt(floor(A/4)+1) + randInt(floor(A/4)+1))
 		* (1 + 0.15(randomFloat() + randomFloat() - 1))
 	k = clamp(round(k), 1, 21亿)
 	有：
-	E(k) = round(l + 1 + A\4)
+	E(k) = round(l + 1 + floor(A/4))
 	k_min = round(0.85 * ( l + 1 ))
-	k_max = round(1.15 * ( l + 1 + 2 * A\4))
+	k_max = round(1.15 * ( l + 1 + 2*floor(A/4)))
 	
 	*其中：
 		clamp(x, 最小值, 最大值) = max(最小值, min(x, 最大值))
 		round(x)为四舍五入
-		a\b为a整除b，例如7\2=6
+		floor(x)为向下取整，即忽略小数取整
 		randInt(x)为生成0~x-1的随机数
 		randomFloat为生成[0,1)的浮点数
+
+只有当计算出的修正附魔等级k在魔咒的附魔等级范围[m,n]之间时，这个魔咒的这个等级才可以出现在魔咒列表中。
