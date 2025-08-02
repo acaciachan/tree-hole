@@ -293,6 +293,49 @@ public static void spawnForChunk(ServerLevel serverLevel, LevelChunk levelChunk,
 	profilerFiller.pop();
 }
 
+public class LocalMobCapCalculator {
+    private final Long2ObjectMap<List<ServerPlayer>> playersNearChunk = new Long2ObjectOpenHashMap<>();
+    private final Map<ServerPlayer, LocalMobCapCalculator.MobCounts> playerMobCounts = Maps.newHashMap();
+    private final ChunkMap chunkMap;
+
+    public LocalMobCapCalculator(ChunkMap chunkMap) {
+        this.chunkMap = chunkMap;
+    }
+
+    private List<ServerPlayer> getPlayersNear(ChunkPos chunkPos) {
+        return this.playersNearChunk.computeIfAbsent(chunkPos.toLong(), l -> this.chunkMap.getPlayersCloseForSpawning(chunkPos));
+    }
+
+    public void addMob(ChunkPos chunkPos, MobCategory mobCategory) {
+        for (ServerPlayer serverPlayer : this.getPlayersNear(chunkPos)) {
+            this.playerMobCounts.computeIfAbsent(serverPlayer, serverPlayerx -> new LocalMobCapCalculator.MobCounts()).add(mobCategory);
+        }
+    }
+
+    public boolean canSpawn(MobCategory mobCategory, ChunkPos chunkPos) {
+        for (ServerPlayer serverPlayer : this.getPlayersNear(chunkPos)) {
+            LocalMobCapCalculator.MobCounts mobCounts = this.playerMobCounts.get(serverPlayer);
+            if (mobCounts == null || mobCounts.canSpawn(mobCategory)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static class MobCounts {
+        private final Object2IntMap<MobCategory> counts = new Object2IntOpenHashMap<>(MobCategory.values().length);
+
+        public void add(MobCategory mobCategory) {
+            this.counts.computeInt(mobCategory, (mobCategoryx, integer) -> integer == null ? 1 : integer + 1);
+        }
+
+        public boolean canSpawn(MobCategory mobCategory) {
+            return this.counts.getOrDefault(mobCategory, 0) < mobCategory.getMaxInstancesPerChunk(); // 每种生物类型的单玩家最大数量
+        }
+    }
+}
+
 public static void spawnCategoryForChunk(
 	MobCategory mobCategory,
 	ServerLevel serverLevel,
@@ -327,7 +370,7 @@ public static int randomBetweenInclusive(RandomSource randomSource, int i, int j
 		1. 数量未到总量上限的生物种类
 		2. 持久类生物(动物)每400tick才刷一次
 	每个区块(chunk)：
-		每种需要生成的生物种类(MobCategory)：
+		如果能找到一个此种生物类型上限还没有满的玩家(MobCategory)：
 			随机获取区块内的一个位置
 				x0,z0 为区块内随机的一个水平位置
 				y0 为(x0,z0)位置随机选一个方块：维度最低方块 ~ 最高非空气方块上方的空气
@@ -686,14 +729,14 @@ public static void spawnCategoryForPosition(
 ```java
 生物(Mob)：true
 	寻路类生物(PathFinderMob)：true
-		动物：下方是草方块 ? true : 实际光照 >= 12
-			蘑菇牛：下方是菌丝 ? true : 实际光照 >= 12
-			海龟：下方含水 || 下方是沙子 ? true : 实际光照 >= 12
-			炽足兽：当前位置是岩浆 || 身体未接触到岩浆 ? true : false
+		动物：下方是草方块 or 实际光照 >= 12
+			蘑菇牛：下方是菌丝 or 实际光照 >= 12
+			海龟：下方含水 or 下方是沙子 or 实际光照 >= 12
+			炽足兽：当前位置是岩浆 or 身体未接触到岩浆
 			美西螈、蜜蜂：true
-		怪物：实际亮度(主世界 <= 12, 下界 < 12)
-			守卫者：下方含水 ? true : 实际亮度(主世界 <= 12, 下界 < 12)
-			蠹虫：下方是可寄生方块 ? true : 实际亮度(主世界 <= 12, 下界 < 12)
+		怪物：**实际亮度(主世界 <= 12, 下界 < 12)**
+			守卫者：下方含水 or 实际亮度(主世界 <= 12, 下界 < 12)
+			蠹虫：下方是可寄生方块 or 实际亮度(主世界 <= 12, 下界 < 12)
 			掠夺者、嘎吱怪、监守者、疣猪兽：true
 ```
 
@@ -827,7 +870,7 @@ public interface SpawnPlacementTypes {
 	对于每个“实体运算的”区块：(随机顺序)
 		对每种未达到总量上限生物类型(MobCategory)：
 			水平随机一个位置
-			从维度最低处到最高费空气方块之间选一个点作为生成原点(HeightMap.WorldSurface 相关)
+			从维度最低处到最高非空气方块之间选一个点作为生成原点(HeightMap.WorldSurface 相关)
 			如果这个生成原点方块不是红石导体：
 				j = 三组游走总生成数量
 				三组从原点出发的随机游走(互不干扰)：
@@ -850,12 +893,12 @@ public interface SpawnPlacementTypes {
 								&& 此生物依然在新位置的可生成列表中(canSpawnMobAt)
 								&& 通过此生物的SpawnPlacements.Types 检查 (on_ground, in_water, in_lava, no_restrictions)
 								&& 通过此生物的SpawnPlacements.checkSpawnRules 的检查 (checkXxxSpawnRules)
-								&& 生成的生物碰撞箱不会被其它**方块**的碰撞箱阻塞
+								&& 生成的生物碰撞箱不会被其它**方块**的碰撞箱阻塞(不考虑液体)
 							那么：
 								在缓存中生成此生物，偏航角随机(随机旋转)，俯仰角0度(平视)
 								如果(3)：
 									(距离玩家 <= 生物的立即消失距离 || 不会远离玩家消失(removeWhenFarAway))
-									&& Mob.checkSpawnRules 
+									&& Mob.checkSpawnRules (各种下方方块判定，以及“亮度12判定”(主世界闭区间，下界开区间))
 									&& 生物碰撞箱不在液体中 
 									&& 生物碰撞箱没有被**实体**的碰撞箱阻塞
 								那么：
@@ -863,7 +906,10 @@ public interface SpawnPlacementTypes {
 									j++, p++
 									尝试添加生物的乘客或着坐骑
 									
-									afterSpawn更新刷怪势能列表和这种生物类型的存在数量列表
+									afterSpawn：
+										更新生成势能
+										更新此种生物的“维度全局数量”
+										更新周围玩家(距离<128)关于此种生物的“本地数量”
 									如果 j >= MaxSpawnClusterSize ，终止本区块这种生物类型的成群生成
 									如果 p 达到了相关的数量限制(热带鱼独享)，只终止这组游走
 ```
