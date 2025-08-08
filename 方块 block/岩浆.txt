@@ -1,0 +1,23 @@
+岩浆随机刻randomTick：
+	如果:
+		/gamerule doFireTick true
+		and (半径128内有玩家 or /gamerule allowFireTickAwayFromPlayers true)
+	那么：
+		R = 随机数0~2
+		如果 R > 0 ：
+			Block = 岩浆位置
+			循环R次：
+				Block = 随机选Block的上方方块的水平周围八个方块中的一个
+				如果 Block位置未加载或世界之外，直接终止本次随机刻
+				如果 Block为空气 and Block相邻方块有可燃方块：
+					点火
+					随机刻结束
+				否则如果 Block为阻挡运动的方块：
+					随机刻结束
+				(否则 Block为不阻挡运动的方块：继续下次循环)
+		否则(R = 0)：
+			尝试3次：
+				Block = 随机选岩浆的水平周围八个方块中的一个
+				如果 Block位置未加载或世界之外，直接终止本次随机刻
+				如果 Block可燃 and Block上方为空气 ：
+					在Block上方点火

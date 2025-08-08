@@ -1,0 +1,19 @@
+甘蔗随机刻randomTick：
+	如果 上方是空气方块 and 甘蔗高度 <3：
+		如果age=15：
+			在上方放置新的age=0的甘蔗
+			把自己设置为age=0
+		否则（age<15）：
+			把自己的age+1
+
+甘蔗能否存活canSurvive：
+	下方方块为(BlockTags.DIRT 或 BlockTags.SAND)
+	and 下方方块水平相邻的四个方块有一个为 (含水方块 或 霜冰)
+	
+甘蔗被更新updateShape：
+	如果无法存活：
+		添加1gt计划刻
+
+甘蔗tick：
+	如果无法存活：
+		破坏甘蔗
