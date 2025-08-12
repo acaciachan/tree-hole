@@ -23,21 +23,30 @@
 	*observer 侦测器，随机状态
 
 保留状态：
-	粗略模式（^[state=value]） 有此状态并与给定状态相同，或没有此状态的方块
-	严格模式（^=[state=value]） 有此状态并与给定状态相同
-	
-	//replace acacia_stairs ^cherry_stairs
-	//replace ##stairs ^cherry_stairs
-	//replace observer ^piston[facing=down]
-	//replace observer ^[facing=down]
-	//set ^[waterlogged=false]
-	
-偏移：（选区应该选目标位置而不是起始位置）
-	>piston,sticky_piston (粘性)活塞的上方
-	<<<##carpets 地毯下方三格 (三格小于)
-	>grass_block 草方块上方（一个大于）
-否定：!...（后面可以接上任意内容）
+	^[state=value]	有此状态并与给定状态相同，或没有此状态的方块
+	^=[state=value]	有此状态并与给定状态相同
 
+	//set ^[waterlogged=false]					所有方块		->	不含水的状态
+	
+	//replace acacia_stairs ^cherry_stairs		金合欢楼梯	->	樱花楼梯
+	//replace ##stairs ^cherry_stairs			所有楼梯		->	樱花楼梯
+	//replace observer ^piston[facing=down]		侦测器		->	向下活塞
+	//replace observer ^[facing=down]			侦测器		->	向下的侦测器
+
+	
+偏移：（作用的位置是从参考方块开始偏移后的位置，而不是偏移后到达参考方块的位置）
+	>A		A的上方
+	<A		A的下方
+	>>>A	A的上方三格
+	<<<A	A的下方三格
+	!A		所有不是A的方块
+
+	>>piston,sticky_piston (粘性)活塞上方两格
+	<<<##carpets	地毯下方
+
+全局蒙版：
+	//gmask <gravel 选择所有砂砾下方的位置
+	//replace air moss_block 蒙版里所有砂砾下方的位置，把所有空气替换为苔藓块
 
 无百分比：obsidian,stone
 有百分比：5%diamond_ore,95%dirt
@@ -77,8 +86,6 @@
 -c 作用于剪切板
 -d 会对不同状态的方块进行区分
 -p 分页
-
-
 
 /biomelist [-p <页面>]
 /biomeinfo 
