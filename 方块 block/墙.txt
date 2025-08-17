@@ -34,7 +34,9 @@ TEST_SHAPES_WALL = Shapes.rotateHorizontal(Block.box(7.0, 0.0, 0.0, 9.0, 16.0, 9
 			那么：加粗
 			否则：不加粗
 	
-	其中：BlockTags.WALL_POST_OVERRIDE : 火把类、线、地上的告示牌、地上的旗帜、压力板、仙人掌花
+	其中：BlockTags.WALL_POST_OVERRIDE : 火把类、地上的告示牌、地上的旗帜、线、压力板、仙人掌花
+	
+	不加粗条件总结：两方向连接都对称时不加粗，当上方方块有地面中心支撑形状的时候，想要不加粗要有至少一组对称高墙。
 	
 接受更新（经验公式）：
 	无视NC更新

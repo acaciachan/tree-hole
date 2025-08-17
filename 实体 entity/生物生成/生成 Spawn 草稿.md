@@ -108,10 +108,10 @@ private void tickChunks(ProfilerFiller profilerFiller, long l, List<LevelChunk> 
 |Name						|名字					|上限	|持久			|立即消失距离		|友好			|
 |:-							|:-						|:-		|:-				|:-					|:-				|
 |							|						|(max)	|(isPersistent)	|(despawnDistance)	|(isFriendly)	|
-|monster					|怪物					|70		|false			|128				|false			|
-|creature					|动物					|10		|true			|128				|true			|
+|monster					|怪物					|70		|false			|128				|**false**		|
+|creature					|动物					|10		|**true**		|128				|true			|
 |ambient					|环境(蝙蝠)				|15		|false			|128				|true			|
-|water_ambient				|水生环境(桶装鱼)		|20		|false			|64					|true			|
+|water_ambient				|水生环境(桶装鱼)		|20		|false			|**64**				|true			|
 |water_creature				|水生生物(鱿鱼、海豚)	|5		|false			|128				|true			|
 |underground_water_creature	|地下水生生物(发光鱿鱼)	|5		|false			|128				|true			|
 |axolotls					|美西螈					|5		|false			|128				|true			|
@@ -865,53 +865,75 @@ public interface SpawnPlacementTypes {
 
 ### 2.4.3 自然生成总结
 简化为以下伪代码：
-```java
-对于每个维度：
-	对于每个“实体运算的”区块：(随机顺序)
-		对每种未达到总量上限生物类型(MobCategory)：
-			水平随机一个位置
-			从维度最低处到最高非空气方块之间选一个点作为生成原点(HeightMap.WorldSurface 相关)
-			如果这个生成原点方块不是红石导体：
-				j = 三组游走总生成数量
-				三组从原点出发的随机游走(互不干扰)：
-					每组生成进行o次生成：
-						x,z 随机偏移(randomInt(6)-randomInt(6))
-						o = 随机1~4，仅作为默认数值，后面会根据选中的生物修改
-						p = 0 (热带鱼相关的计数器)
-						如果(1)：
-							当前位置距离玩家>24.0 && 距离出生点>=24.0 
-							&& (当前位置还在生成原点的区块 || 当前位置强加载)
-						那么：
-							如果还未决定生成生物，则在当前位置随机选取可生成的生物
-							如果选取出来的为空，直接停止这组游走
-							spawnData为选取到的生成生物的信息
-							o = 随机取该生物生成次数(最少次数~最大次数)
-							如果(2)：
-								满足生成势能判断
-								&& 生成类型不是 misc(杂项)
-								&& (距离玩家 <= 生物的立即消失距离 || 能远离玩家生成(canSpawnFarFromPlayer))
-								&& 此生物依然在新位置的可生成列表中(canSpawnMobAt)
-								&& 通过此生物的SpawnPlacements.Types 检查 (on_ground, in_water, in_lava, no_restrictions)
-								&& 通过此生物的SpawnPlacements.checkSpawnRules 的检查 (checkXxxSpawnRules)
-								&& 生成的生物碰撞箱不会被其它**方块**的碰撞箱阻塞(不考虑液体)
-							那么：
-								在缓存中生成此生物，偏航角随机(随机旋转)，俯仰角0度(平视)
-								如果(3)：
-									(距离玩家 <= 生物的立即消失距离 || 不会远离玩家消失(removeWhenFarAway))
-									&& Mob.checkSpawnRules (各种下方方块判定，以及“亮度12判定”(主世界闭区间，下界开区间))
-									&& 生物碰撞箱不在液体中 
-									&& 生物碰撞箱没有被**实体**的碰撞箱阻塞
-								那么：
-									调用该生物的 finalizeSpawn 完善生成
-									j++, p++
-									尝试添加生物的乘客或着坐骑
-									
-									afterSpawn：
-										更新生成势能
-										更新此种生物的“维度全局数量”
-										更新周围玩家(距离<128)关于此种生物的“本地数量”
-									如果 j >= MaxSpawnClusterSize ，终止本区块这种生物类型的成群生成
-									如果 p 达到了相关的数量限制(热带鱼独享)，只终止这组游走
+```python
+获取所有“实体运算(强加载)”的区块为ChunkList列表
+把ChunkList列表打乱顺序
+此维度的区块刻阶段(tickChunks)： 
+
+    统计所有玩家附近方形距离8的区块数量(不重复)(玩家周围17x17的区块)(自然生成区块"naturalSpawnChunk")
+    更新生成状态：
+        获取大于等于“边界加载”的所有生物，
+        对于 Mob类 and 非Misc类 and 没有“永久存在标记(普通永久存在标记 or 自定义永久存在标记)”：
+            加入对应生物种类(MobCatgory)的维度上限(MobCap) # 单人的维度上限
+            更新生成势能
+
+    获取“待生成的生物种类列表”：
+        MobCategory里面除了Misc的所有类
+        "creature"仅在gametime整除400时加入列表(因为isPersistent判定)
+        如果"/gamerule doMobSpawning" == false，那么列表就直接为空
+    
+    遍历所有的ChunkList列表，执行tickSpawningChunk：
+        执行此区块的生物生成 spawnForChunk：
+            遍历要生成的“待生成的生物种类列表”：# 每个区块
+                如果附近存在此生物种类上限不满的玩家(localMobCapCalculator.canSpawn)：
+                执行此区块此生物种类的生成SpawnCategoryForChunk： # 每个生物种类
+                    区块内随机选一个水平位置，在维度最低y ~ 最高非空气方块y值 +1 中选一个整数y位置 # “最高非空气方块的高度”在以前被社区俗称的LC值（然而这全都是个误解）
+                    如果位置不为维度最低y，那么就在这个选中位置的方块执行生成，作为生成原点O: # 最高方块越低越好
+                    # 生成生物主代码：
+                        如果这个生成原点O的方块不是红石导体：# 非常重要，刷怪平面内不能有“可导方块”
+                            j = 三组游走的总的生成数量计数器
+                            三组成群生成：
+                                游走起点重新设置为生成原点O
+                                o = 随机1~4 # 仅作为初始默认数值，后面会根据选中的生物修改此数值
+                                p = 0 # 热带鱼相关的计数器                           
+                                每组成群生成(o次)：
+                                    x,z 随机偏移(随机数(0~5) - 随机数(0~5)) 得到当前生成的位置
+                                    # 每次游走的偏移量实际是个“三角分布”，范围为-5~5
+                                    # 详细权重：0(6) ±1(5) ±2(4) ±3(3) ±4(2) ±5(1)
+                                    如果(1)：
+                                        当前位置距离玩家>24.0 and 距离出生点>=24.0 #  距离玩家(和出生点) > 24
+                                        and (当前位置还在生成原点的区块 or 当前位置强加载) # 要求强加载
+                                    那么：
+                                        如果还未决定生成生物，则在当前位置随机选取可生成的生物 # 一般列表只与群系有关，但是“结构(structure)”会直接覆盖群系的列表
+                                        如果选取出来的为空，直接停止这组成群生成
+                                        spawnData为选取到的生成生物的信息
+                                        o = 随机取该生物生成次数(最少次数~最大次数) # 多数为4~4或1~4
+                                        如果(2)：
+                                            生成类型不是 misc(杂项)
+                                            and 满足生成势能判断
+                                            and (距离玩家 <= 生物的立即消失距离 or 能远离玩家生成(canSpawnFarFromPlayer)) # 距离玩家 < 128(水生环境为64)
+                                            and 此生物依然在新位置的可生成列表中 # canSpawnMobAt
+                                            and 通过此生物的SpawnPlacements.Types 检查 # on_ground, in_water, in_lava, no_restrictions
+                                            and 通过此生物的SpawnPlacements.checkSpawnRules 的检查 # check____SpawnRules
+                                            and 生物碰撞箱不会被**方块**的碰撞箱阻塞(不考虑液体) # 方块碰撞检测
+                                        那么：
+                                            在缓存中生成此生物，偏航角随机(随机旋转)，俯仰角0度(平视)
+                                            如果(3)：
+                                                (距离玩家 <= 生物的立即消失距离 or 不会远离玩家消失(removeWhenFarAway))
+                                                and Mob.checkSpawnRules # 各种下方方块判定，和是否大于或小于12亮度的判断(主世界闭区间，下界开区间)
+                                                and 生物碰撞箱不在液体中 
+                                                and 生物碰撞箱不会被**其他实体**的碰撞箱阻塞 # 实体碰撞检测
+                                            那么：
+                                                调用该生物的 finalizeSpawn 完善生成 # 设置手持物品，幼年化，骑士化等等
+                                                j++, p++
+                                                更新乘客状态相关
+                                                
+                                                afterSpawn：
+                                                    更新生成势能
+                                                    更新此种生物的“维度上限数量”
+                                                    更新周围玩家(距离<128)关于此种生物的“本地生物”
+                                                如果 j >= MaxSpawnClusterSize ，终止本区块这种生物类型的成群生成
+                                                如果 p 达到了相关的数量限制(热带鱼独享)，只终止这组游走
 ```
 
 再根据社区多年的经验，可总结出一下：
