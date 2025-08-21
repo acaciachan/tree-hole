@@ -1,0 +1,37 @@
+
+猫的自定义生成器 tick：
+	如果 /gamerule doMobSpawing 为 true：
+		nextTick--
+		如果 nextTick <=0 :
+			nextTick = 1200
+			随机选取一个活着的玩家P(包含旁观)，如果有：
+				在玩家P位置y不变，水平方向x和z分别偏移±[8, 31]，得到A
+				如果：在A的(x-10,y-10,z-10)到(x+10,y+10,z+10)范围内
+					的区块都为“边界加载等级”及以上
+					and A位置满足猫的SpawnPlacementTypes.On_Ground判断
+				那么：
+					如果：A点的区段曼哈顿距离<=2的区段内存在被村民占用的床(的POI)
+					那么：执行spawnInVillage：
+						如果：A为中心、48方块半径的球形区域内,
+							存在至少5个被占用的“home(床)”类型POI
+							and 位于A的完整方块形状inflate(48.0, 8.0, 48.0)范围能触碰到猫的数量 < 5
+						那么：执行spawnCat(A, false)
+					否则如果：A点结构标签为StructureTags.CATS_SPAWN_IN(目前只有女巫小屋)
+					那么：执行spawnInHut：
+						如果：位于A的完整方块形状inflate(16.0, 8.0, 16.0)范围没有能触碰到猫
+						那么：执行spawnCat(A, true)
+
+spawnCat(方块位置，bl=true/false)：
+	新建猫的实体
+	对新建的猫执行finalizeSpawn：
+		幼年化(可生长动物均为1/20)和族群相关
+		选择猫的变种：
+			如果A位置是在女巫小屋结构中：
+				一定为黑猫(all_black)
+			否则如果月相不是“满月”
+				除了黑猫以外的所有变种猫中随机选择
+			否则如果月相是“满月”
+				所有变种猫中随机选择
+	如果bl为true(来自spawnInHut)：
+		给猫添加“永久存在”的实体数据
+	猫放置在A点

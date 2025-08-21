@@ -1,0 +1,43 @@
+巡逻队 Patrol 的自定义生成器 tick：
+	如果 /gamerule doPatrolSpawning 为 true：
+		nextTick--
+		如果 nextTick <=0 :
+			nextTick = 12000 + 随机(0~1199)
+			如果：DayTime >= 5*24000
+				and 维度没有"fixed_time"
+				and skyDarken < 4
+				and 1/5概率执行
+				and 此维度玩家数量>=1
+				and 此维度随机选一个玩家为P
+				and 玩家P不为旁观
+			如果：玩家P所在区段曼哈顿距离<=2的区段内存在被村民占用的床(的POI)
+				and 在玩家P的方块位置y不变，水平方向x和z分别偏移随机的±[24, 47]，得到A
+				and 在A的(x-10,y-10,z-10)到(x+10,y+10,z+10)范围内
+					的区块都为“边界加载等级”及以上
+				and A点群系不含BiomeTags.WITHOUT_PATROL_SPAWNS (目前只有蘑菇岛(mushroom_fields))
+			那么：
+				n = 1 + 向上取整(A方块区域难度)
+					# 困难模式63MC日后，某处区块难度取值范围为 3<区块难度<6.75，此时 n = 5 ~ 9
+				
+				可移动位置B = A处最高阻挡运动的方块的上方方块
+				执行 n 次：
+					第1次：
+						尝试执行spawnPatrolMember(B方块位置, true)
+						如果返回false，直接break，终止不再继续执行后续次数
+					第2次及以后：
+						尝试执行spawnPatrolMember(B方块位置, false)
+
+生成巡逻队 spawnPatrolMember(B位置, bl=true/fasle)：
+	如果：isValidEmptySpawnBlock(B位置, pillager(掠夺者))
+		and checkPatrollingMonsterSpawnRules(B位置)
+	那么：
+		在B位置生成掠夺者
+		如果bl=true (第一次执行)，那么设置为“巡逻队队长”()
+		执行掠夺者的finalizeSpawn (设置巡逻状态，如果是队长则头顶旗帜)
+	否则：直接return false
+
+以下部分较为复杂，详见“生物生成”：
+	isValidEmptySpawnBlock：生物能否在这个空位生成
+	checkPatrollingMonsterSpawnRules：
+		方块亮度 <= 7 and 不为和平模式 and (来自刷怪笼 or isValidSpawn(实体的下方方块))
+	isValidSpawn：特判() + (下方)方块通用判定(上表面支撑形状完整 and 发光亮度 < 14 )

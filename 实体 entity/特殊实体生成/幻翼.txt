@@ -1,6 +1,0 @@
-tick：
-	nextTick--
-	if !nextTick > 0:
-		nextTick = randomInt(1200, 2400)
-		if (skyDarken < 5 && hasSkyLight (主世界)):
-			

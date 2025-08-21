@@ -1,0 +1,29 @@
+幻翼 自定义生成器tick：
+	如果 "/gamerule doInsomia"==true：
+		nextTick -= 1
+		如果 nextTick<=0：
+			nextTick = 20*(60~119) ≈ 1200~2400
+			如果 skyDarken >=5 or 此维度"has_skylight"==false：
+				
+				对于每个非旁观玩家：
+					如果：
+						(此维度"has_skylight"==false 
+						or ( 玩家方块位置y>=海平面(63) and 玩家方块位置天空亮度>=15 )) # 主世界玩家上方没有影响天空光的方块
+						and 玩家所在区块难度 > (0<=随机数<3)
+						and 随机数(0 ~ 玩家不睡觉tick) >= 72000tick
+					那么：
+						生成点 = 玩家位置y偏移(20~34)，x轴偏移(-10~10)，z轴偏移(-10~10)
+						# 玩家头顶21*15*21的范围，范围内底部中心方块 = 玩家位置方块 + 20 (再+7到达区域中心方块)
+						如果：# 以下实际上是 isValidEmptySpawnBlock(生成点, 幻翼)，来自SpawnPlacementTypes的on_ground上半部分判断
+							碰撞箱不能为完整方块 # isCollisionShapeFullBlock)
+							and 不能是“红石信号源” # .isSignalSource)
+							and 不能“含有液体” # fluidState.isEmpty())
+							and 不是含有BlockTags.PREVENT_MOB_SPAWNING_INSIDE # 目前只有四种铁轨
+							and 不是对于这个生物危险的方块(entityType.isBlockDangerous) # 详细分析看下方
+						那么：
+							在生成点生成随机数（1 ~ 1 + 游戏难度id）个幻翼 # 困难模式随机1~4只
+								每个幻翼都会执行finalizeSpawn(锚点设置为生成点的上方第5个方块)，添加到世界
+
+总结：
+1.	位置条件：主世界 and 玩家方块位置y>=海平面(63) and 玩家方块位置天空亮度>=15
+2.	玩家条件：随机数(0 ~ 玩不睡觉时间) >= 72000

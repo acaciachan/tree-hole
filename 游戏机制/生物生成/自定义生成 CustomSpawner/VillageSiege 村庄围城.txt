@@ -1,0 +1,58 @@
+村庄围城 自定义生成器tick：
+	如果 维度没有fixed_time and skyDarken < 4：
+		
+		如果是午夜(daytime % 24000 == 18000):
+			siegeState 有 1/10 概率设置为siege_tonight，剩下 9/10 概率设置为siege_done
+			
+		如果 siegeState = siege_tonight：
+			
+			如果 hasSetupSiege == false：
+				尝试执行tryToSetupSiege(当前维度)
+					如果失败：return # 终止本次tick，以下代码都不再执行
+					如果成功：hasSetupSiege = true
+			
+			如果：nextSpawnTime > 0
+				nextSpawnTime -= 1
+			否则：
+				nextSpawnTime = 2
+				如果：zombiesToSpawn > 0
+					执行trySpawn(当前维度)
+					zombiesToSpawn -= 1
+				否则：
+					siegeState = siege_done
+			
+	否则：
+		siegeState = siege_done
+		hasSetupSiege = false
+
+	
+tryToSetupSiege(此维度)：#  能否找到一个周围满足僵尸围成条件的玩家
+	对于每个非旁观的玩家：
+		如果：玩家P所在区段曼哈顿距离<=1的区段内存在被村民占用的床(的POI)
+			and 玩家位置的群系不含BiomeTags.WITHOUT_ZOMBIE_SIEGES (目前只有蘑菇岛)
+		那么：
+			尝试10次：
+				随机选一个距离玩家半径32m的水平位置，作为原点
+				spawn = 当前原点 # 此位置是村庄围城的一个变量，后续生成需要用到
+				尝试findRandomSpawnPos(spawn)，如果找到：
+					nextSpawnTime = 0
+					zombiesToSpawn = 20 # 会生成20只
+					停止继续寻找
+			返回true （有一个玩家满足要求）
+	返回fasle (没有一个玩家满足)
+
+
+findRandomSpawnPos(原点)： # 获取在原点周围16x16尝试找10次村庄附近的僵尸生成点
+	尝试10次：
+		从原点x,z分别偏移随机[-8,+7]，y移动到最高非空气方块的上方方块
+		如果：
+			此位置满足checkMonsterSpawnRules # 难度非和平 and isDarkEnoughToSpawn and isValidSpawn(下方方块)
+			and 此位置所在区段曼哈顿距离<=1的区段内存在被村民占用的床(的POI)
+		那么：返回此位置的底部中心位置
+	未找到返回空
+
+
+trySpawn(此维度)：
+	生成点 = findRandomSpawnPos(spawn)
+	如果 生成点 不为空：
+		生成僵尸，finalizeSpawn，添加到世界
