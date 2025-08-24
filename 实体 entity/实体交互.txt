@@ -1,18 +1,22 @@
-怪物捡起物品实体：this.getBoundingBox().inflate(1, 0, 1)
-	悦灵：this.getBoundingBox().inflate(1, 0, 1)
-玩家触摸实体((捡起)物品实体、河豚、史莱姆、(捡起)箭和三叉戟、(吸收)经验等)：
-	自由状态：this.getBoundingBox().inflate(1, 1, 1)
-	乘客状态：最小外接玩家与载具碰撞箱的长方体，再inflate(1, 0, 1)
+船拉客：this.getBoundingBox().inflate(0.2, -0.01, 0.2)
+矿车拉客：this.getBoundingBox().inflate(0.2, 0, 0.2)
+
 漏斗矿车膨胀吸物品：this.getBoundingBox().inflate(0.25, 0, 0.25)
 物品实体互相合并：this.getBoundingBox().inflate(0.5, 0, 0.5)
+
 经验球互相合并：
 	发起合并条件：tickCount % 20 == 1
 	寻找范围：this.getBoundingBox().inflate(0.5, 0.5, 0.5)
 	合并要求：经验值相等，实体编号id差值是40的倍数
 	结果：发起合并的吞掉另一个，age取两者最小值
+
+怪物捡起物品实体：this.getBoundingBox().inflate(1, 0, 1)
+	悦灵：this.getBoundingBox().inflate(1, 1, 1)
+	在次tick本阶段会遍历所有的物品，表现就是一个tick内换了多次盔甲
+玩家触摸实体((捡起)物品实体、河豚、史莱姆、(捡起)箭和三叉戟、(吸收)经验等)：
+	自由状态：this.getBoundingBox().inflate(1, 1, 1)
+	乘客状态：最小外接玩家与载具碰撞箱的长方体，再inflate(1, 0, 1)
 	
-船拉客：this.getBoundingBox().inflate(0.2, -0.01, 0.2)
-矿车拉客：this.getBoundingBox().inflate(0.2, 0, 0.2)
 
 玩家攻击：手长直线距离3m，创造模式变长为5m
 普通生物攻击范围：net.minecraft.world.entity.Mob#getAttackBoundingBox
