@@ -1,0 +1,119 @@
+溺尸自然生成群系及其权重：
+	河流(river) 100/615 ≈ 1/6 1只
+	溶洞(dripstone_caves) 95/610 ≈ 1/6 4只！！
+	海洋类(*_ocean) 5/520 ≈ 1/100 1只
+	冻河(frozen_river) 1/516 ≈ 1/500 1只
+	其余不刷
+	
+	溺尸生成条件原始代码：
+		如果：下方含水 or 某种刷怪笼
+		那么：
+			bl = 非和平 and (试炼刷怪笼 or 越暗越好) and (某种刷怪笼 or 此处含水)
+			如果：!bl or (!某种刷怪笼 and !增援)
+			那么：
+				如果：此处群系有“BiomeTags.MORE_FREQUENT_DROWNED_SPAWNS”(河流或冻河) 
+				那么：1/15概率 and bl
+				否则：1/40概率 and bl and (此处y < 海平面-5)
+			否则：true
+		否则：false
+
+	原始代码非常垃圾，简化后：	
+		自然生成：
+			如果：非和平 and 越暗越好 and 此处含水 and 下方含水
+			那么：
+				如果：此处群系有“BiomeTags.MORE_FREQUENT_DROWNED_SPAWNS”(河流或冻河) 
+				那么：1/15概率
+				否则：1/40概率 and (此处y < 海平面-5)
+			否则：失败
+
+		增援：非和平 and 越暗越好 and 下方含水 and 此处含水 
+		刷怪笼：非和平 and 越暗越好
+		试炼刷怪笼：非和平
+	
+
+守卫者：
+	非和平 and (1/20概率 or 水下不可见天空) and 下方含水 and (此处含水 or 来自刷怪笼)
+	
+	水下可见天空（canSeeSkyFromBelowWater(此方块)）：
+		如果：此方块 >= 海平面，那么：return 此处天空亮度 == 15
+		否则 (此方块 <  海平面)：
+			B = 生成点的海平面高度的方块
+			如果：B处天空亮度<15
+			那么：return true
+			否则：
+				遍历：海平面下方方块 ~ 生成点上方法的方块
+				直到找到“不完全透光 and 不是流体(包含气泡柱)”的方块，return false
+				遍历全部之后均没有，return true
+		简化为：
+			如果：此方块 >= 海平面，那么：return 此处天空亮度 == 15
+			否则(此方块 < 海平面)：
+				此方块海平面高度处天空亮度 == 15
+				and 海平面下方方块 ~ 生成点上方方块 的范围不存在“不完全透光 and 不是流体(包含气泡柱)”的方块
+
+
+蝙蝠：
+	如果今天为万圣节
+	那么：j=7
+	否则(平时)：j=4，并且1/2概率停止生成
+	
+	满足：
+	实际亮度 > 0 ~ j-1 的随机数
+	and 此处方块有“BlockTags.BATS_SPAWNABLE_ON”(石头、三废岩、凝灰岩、深板岩)
+	and (由刷怪笼生成 or isValidSpawn(下方方块))
+
+末影螨：
+	某种刷怪笼：难度不是和平
+	玩家使用珍珠瞬移生成：不进行此判断
+	其它生成(例如末影人瞬移)：
+		难度不是和平 and isValidSpawn(下方方块) 
+		and 距离此处方块中心<5的球形距离内没有非旁观、非创造的玩家
+
+蠹虫：
+	某种刷怪笼：难度不是和平
+	虫蚀方块破碎：不进行此判断
+	其它生成：
+		难度不是和平 and isValidSpawn(下方方块) 
+		and 距离此处方块中心<5的球形距离内没有非旁观、非创造的玩家
+
+北极熊：
+	(下方方块为“BlockTags.ANIMALS_SPAWNABLE_ON”(只有草方块)
+	and (来自试炼刷怪笼 or max(天空亮度, 方块亮度) >= 9))
+	or 
+	(此处群系为“BiomeTags.POLAR_BEARS_SPAWN_ON_ALTERNATE_BLOCKS”(冻洋、深海冻洋) 
+	and 下方方块为“BlockTags.POLAR_BEARS_SPAWNABLE_ON_ALTERNATE”(冰)
+	and max(天空亮度, 方块亮度) >= 9)
+	
+僵尸马、骷髅马：
+	下方方块为“BlockTags.ANIMALS_SPAWNABLE_ON”(只有草方块)
+	and (来自试炼刷怪笼 or max(天空亮度, 方块亮度) >= 9)
+	or (试炼刷怪笼 or 普通刷怪笼 and max(天空亮度, 方块亮度) >= 9)
+
+	试炼刷怪笼：无条件
+	普通刷怪笼：max(天空亮度, 方块亮度) >= 9
+	其它条件：下方方块为“BlockTags.ANIMALS_SPAWNABLE_ON”(只有草方块)
+	and max(天空亮度, 方块亮度) >= 9)
+
+	简化后：来自试炼刷怪笼 or max(天空亮度, 方块亮度) >= 9 and (来自普通刷怪笼 or 下方方块为“BlockTags.ANIMALS_SPAWNABLE_ON”(只有草方块))
+
+史莱姆：
+	某种刷怪笼：无条件
+	其它生成：
+		如果：
+			(此处生物群系有“BiomeTags.ALLOWS_SURFACE_SLIME_SPAWNS”(沼泽、红树林沼泽)
+			and 50 < 此处y <70
+			and 1/2 概率
+			and 月相的概率
+			and 实际亮度 <= 0~7随机数)
+			or
+			(1/10概率 and 此处y < 40 and 此种子此区块满足史莱姆区块判定)
+		那么：
+			某种刷怪笼生成 or isValidSpawn(下方方块)
+			
+流浪者：
+	checkMonsterSpawnRules
+	and  (某种刷怪笼生成 or 此处(或细雪堆的表面方块)天空亮度==15)
+
+海龟：
+	此处y < 海平面+4
+	and (海龟蛋的判定)下方方块有“BlockTags.SAND”(沙子、红沙、可以的沙子)
+	and max(天空亮度, 方块亮度) >= 9
