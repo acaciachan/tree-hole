@@ -57,7 +57,7 @@
 	否则(平时)：j=4，并且1/2概率停止生成
 	
 	满足：
-	实际亮度 > 0 ~ j-1 的随机数
+	实际亮度 <= 0 ~ j-1 的随机数
 	and 此处方块有“BlockTags.BATS_SPAWNABLE_ON”(石头、三废岩、凝灰岩、深板岩)
 	and (由刷怪笼生成 or isValidSpawn(下方方块))
 
@@ -76,12 +76,11 @@
 		and 距离此处方块中心<5的球形距离内没有非旁观、非创造的玩家
 
 北极熊：
-	(下方方块为“BlockTags.ANIMALS_SPAWNABLE_ON”(只有草方块)
-	and (来自试炼刷怪笼 or max(天空亮度, 方块亮度) >= 9))
-	or 
-	(此处群系为“BiomeTags.POLAR_BEARS_SPAWN_ON_ALTERNATE_BLOCKS”(冻洋、深海冻洋) 
-	and 下方方块为“BlockTags.POLAR_BEARS_SPAWNABLE_ON_ALTERNATE”(冰)
-	and max(天空亮度, 方块亮度) >= 9)
+	checkAnimalSpawnRules
+	or
+		(此处群系为“BiomeTags.POLAR_BEARS_SPAWN_ON_ALTERNATE_BLOCKS”(冻洋、深海冻洋) 
+		and 下方方块为“BlockTags.POLAR_BEARS_SPAWNABLE_ON_ALTERNATE”(冰)
+		and max(天空亮度, 方块亮度) >= 9)
 	
 僵尸马、骷髅马：
 	下方方块为“BlockTags.ANIMALS_SPAWNABLE_ON”(只有草方块)
@@ -90,8 +89,9 @@
 
 	试炼刷怪笼：无条件
 	普通刷怪笼：max(天空亮度, 方块亮度) >= 9
-	其它条件：下方方块为“BlockTags.ANIMALS_SPAWNABLE_ON”(只有草方块)
-	and max(天空亮度, 方块亮度) >= 9)
+	其它条件：
+		下方方块为“BlockTags.ANIMALS_SPAWNABLE_ON”(只有草方块)
+		and max(天空亮度, 方块亮度) >= 9)
 
 	简化后：来自试炼刷怪笼 or max(天空亮度, 方块亮度) >= 9 and (来自普通刷怪笼 or 下方方块为“BlockTags.ANIMALS_SPAWNABLE_ON”(只有草方块))
 
