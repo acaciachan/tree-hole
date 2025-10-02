@@ -27,6 +27,8 @@
     "servux.config.debug_data.permission_level.name": "权限等级",
     "servux.config.debug_data.server_development_mode.comment": "启用原版「开发模式」标志",
     "servux.config.debug_data.server_development_mode.name": "服务器开发模式",
+    "servux.config.entity_data.fix_allay_gathering.comment": "修复“mobGriefing”禁用时悦灵无法收集物品的问题\n原版没有理由这样做。",
+    "servux.config.entity_data.fix_allay_gathering.name": "修复悦灵无法收集",
     "servux.config.entity_data.nbt_query_override.comment": "覆盖NBT查询数据包的默认OP等级2权限，使用「nbt_query_permission_level」设置权限",
     "servux.config.entity_data.nbt_query_override.name": "NBT查询数据包权限覆盖",
     "servux.config.entity_data.nbt_query_permission_level.comment": "启用「nbt_query_override」时，NBT查询数据包所需权限等级",
