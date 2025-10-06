@@ -1,0 +1,24 @@
+canStayAt(此位置，此表面)：
+	如果：此处为空气或移动中的方块 and 此表面碰撞箱完整 and 潜影贝伸长到2m的形状不会撞到方块碰撞箱或液体
+	那么：true(可以呆在这里)
+	否则：fasle(无法呆在这里)
+
+findAttachableSurface(方块位置)：
+	尝试6个方向，如果某个方向满足canStayAt(此方块位置，此表面)，返回这个方向，否则返回null
+
+tick：
+	super.tick()
+	如果：自己不是乘客 and !canStayAt(此方块位置，此表面)
+	那么：
+		如果：在原位置能找到别的朝向满足canStayAt(此位置，某表面)
+		那么：调整朝向
+		否则：teleportSomewhere() # 寻找新位置
+
+teleportSomewhere()：
+	尝试5次：
+		在以自己为中心17×17×17的立方体区域内随机选择一个方块作为方块A
+		如果：A在世界和边界内 and A为空气 and 潜影贝当前的碰撞箱在A方块位置不会撞到别的碰撞箱
+		那么：
+			方向D = findAttachableSurface(A方块位置)
+			如果 方形D 存在：
+				完成潜影贝的传送到A方块位置，朝向方向D，播放声音等后续处理
