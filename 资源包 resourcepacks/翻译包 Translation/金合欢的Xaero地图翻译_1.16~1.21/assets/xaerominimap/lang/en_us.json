@@ -609,5 +609,6 @@
 	"gui.xaero_tracked_player_minimap_icon_scale" : "Tracked Player On-Map Scale",
 	"gui.xaero_box_tracked_player_minimap_icon_scale" : "Scale of the tracked player icons on the minimap.",
 	"gui.xaero_toggle_tracked_players_on_map" : "Toggle Tracked Players On Map",
-	"gui.xaero_toggle_tracked_players_in_world" : "Toggle Tracked Players In World"
+	"gui.xaero_toggle_tracked_players_in_world" : "Toggle Tracked Players In World",
+	"key.category.xaerominimap.controls" : "Xaero's Minimap"
 }

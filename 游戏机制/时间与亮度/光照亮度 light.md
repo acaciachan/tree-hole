@@ -32,9 +32,9 @@
 
 ### 2. 实际亮度(maxLocalRawBrightness)
 
-    世界之内：maxLocalRawBrightness() = rawBrightness(skyDarken)
+    ±3000kw之内：maxLocalRawBrightness() = rawBrightness(skyDarken)
 
-    世界之外：maxLocalRawBrightness() = 15
+    ±3000kw之外：maxLocalRawBrightness() = 15
 
 ### 3. 参考亮度(maxLocalRawBrightness(i))
 

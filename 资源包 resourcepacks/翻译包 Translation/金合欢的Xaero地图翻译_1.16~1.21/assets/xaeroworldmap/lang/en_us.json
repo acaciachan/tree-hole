@@ -270,6 +270,7 @@
 	"gui.xaero_toggle_dimension" : "Toggle Dimension",
 	"gui.xaero_switched_to_dimension" : "Switched to §2%s§r",
 	"gui.xaero_switched_to_current_dimension" : "Switched to §2%s§r (current)",
-	"gui.xaero_pac_claim_selection_out_of_dimension" : "§8(Claims) Out of Dimension..."
+	"gui.xaero_pac_claim_selection_out_of_dimension" : "§8(Claims) Out of Dimension...",
+	"key.category.xaeroworldmap.controls" : "Xaero's World Map"
 	
 }

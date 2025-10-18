@@ -75,5 +75,6 @@
     "gui.xaero_no_durability": "无",
     "gui.xaero_held_centered_position": "居中时的持有物品",
     "gui.xaero_held_centered_position_screen_edges": "边缘",
-    "gui.xaero_held_centered_position_hotbar": "热栏"
+    "gui.xaero_held_centered_position_hotbar": "热栏",
+	"key.category.xaerobetterpvp.controls" : "Better PVP (小地图)"
 }

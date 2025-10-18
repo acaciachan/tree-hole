@@ -609,5 +609,6 @@
     "gui.xaero_tracked_player_minimap_icon_scale": "追踪玩家地图上缩放",
     "gui.xaero_box_tracked_player_minimap_icon_scale": "小地图上追踪玩家图标的缩放。",
     "gui.xaero_toggle_tracked_players_on_map": "切换地图上追踪的玩家",
-    "gui.xaero_toggle_tracked_players_in_world": "切换世界内追踪的玩家"
+    "gui.xaero_toggle_tracked_players_in_world": "切换世界内追踪的玩家",
+	"key.category.xaerominimap.controls" : "Xaero's Minimap (小地图)"
 }

@@ -270,5 +270,6 @@
     "gui.xaero_toggle_dimension": "切换维度",
     "gui.xaero_switched_to_dimension": "切换到§2%s§r",
     "gui.xaero_switched_to_current_dimension": "切换到§2%s§r（当前）",
-    "gui.xaero_pac_claim_selection_out_of_dimension": "§8(认领) 维度外..."
+    "gui.xaero_pac_claim_selection_out_of_dimension": "§8(认领) 维度外...",
+	"key.category.xaeroworldmap.controls" : "Xaero's World Map (世界地图)"
 }
