@@ -108,10 +108,6 @@
 			(1/10概率 and 此处y < 40 and 此种子此区块满足史莱姆区块判定)
 		那么：
 			某种刷怪笼生成 or isValidSpawn(下方方块)
-			
-流浪者：
-	checkMonsterSpawnRules
-	and  (某种刷怪笼生成 or 此处(或细雪堆的表面方块)天空亮度==15)
 
 海龟：
 	此处y < 海平面+4
