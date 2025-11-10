@@ -57,6 +57,46 @@
     },
     {
       "version": 1,
+      "string": "/gamerule command_block_output false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule max_block_modifications 2000000000",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule advance_time false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule advance_weather false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule spawn_phantoms false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule spawn_patrols false",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule keep_inventory true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/gamerule send_command_feedback true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
       "string": "/difficulty hard",
       "delayTicks": 1
     },
