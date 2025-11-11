@@ -212,6 +212,16 @@
     },
     {
       "version": 1,
+      "string": "/carpet commandPlayerActionPerTick true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
+      "string": "/carpet setDefault commandPlayerActionPerTick true",
+      "delayTicks": 1
+    },
+    {
+      "version": 1,
       "string": "/carpet creativeInstantTame true",
       "delayTicks": 1
     },

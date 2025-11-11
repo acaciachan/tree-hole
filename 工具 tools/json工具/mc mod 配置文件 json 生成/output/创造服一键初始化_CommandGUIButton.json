@@ -43,6 +43,8 @@
     "/carpet setDefault cleanLogs true",
     "/carpet commandManipulate ops",
     "/carpet setDefault commandManipulate ops",
+    "/carpet commandPlayerActionPerTick true",
+    "/carpet setDefault commandPlayerActionPerTick true",
     "/carpet creativeInstantTame true",
     "/carpet setDefault creativeInstantTame true",
     "/carpet creativeNetherWaterPlacement true",

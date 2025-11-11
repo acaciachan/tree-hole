@@ -33,6 +33,7 @@
 /carpet chatMessageLengthLimitUnlocked true
 /carpet cleanLogs true
 /carpet commandManipulate ops
+/carpet commandPlayerActionPerTick true
 /carpet creativeInstantTame true
 /carpet creativeNetherWaterPlacement true
 /carpet creativeNoClip true
