@@ -1,0 +1,97 @@
+草方块的performBonemeal(..., 草方块位置)：
+    目标位置 = 草方块位置上方一格
+    短草方块 = 获取短草方块的默认状态
+    植被特征 = 从注册表中获取"GRASS_BONEMEAL"特征
+    
+    循环执行128次(当前为第i次，i=0~127)：
+        当前尝试位置 = 草方块位置上方一格
+
+        连续进行i/16次(向下取整)偏移：
+        (i=0~15时，偏移0次，i=16~31时偏移1次，...，i=112~127时偏移7次)：
+            在当前尝试位置上随机偏移:
+				x: -1~1
+				y: 0,-1,1("0"的权重为7，"-1""+1"的权重为1)
+				z: -1~1
+            如果偏移后下方不是草方块，或当前位置为完整碰撞箱方块:
+                跳过本次（也就是第i次）的尝试
+        
+        如果当前位置是短草方块，那么有10%概率:
+            如果短草方块可以接受骨粉（自身可存活且上方是空气），那么“长高”
+        
+        如果当前位置是空气:
+            如果（1/8概率）:
+                尝试生成花:
+                    获取生物群系的花卉特征列表
+                    随机选择一种花卉配置，放置该花卉特征
+            否则:
+                放置预设的草和植物特征(GRASS_BONEMEAL)
+
+下界岩被骨粉催熟的成功条件 isValidBonemealTarget：
+	上方方块满足“可向下传播天光(propagatesSkylightDown)”
+	and 以自己为中心的3x3x3范围内，按照“zyx,-+的字典顺序”遍历，存在下界菌岩
+
+下界岩被骨粉催熟 performBonemeal：
+	以自己为中心的3x3x3范围，按照“zyx,-+的字典顺序”遍历每个方块：
+		如果只有绯红菌岩：
+			自己变成绯红菌岩
+		如果只有诡异菌岩：
+			自己变成诡异菌岩
+		如果两者都有：
+			自己变成“随机二选一”
+
+下界菌岩被骨粉催熟的成功条件 isValidBonemealTarget：
+	上方是空气
+
+下界菌岩被骨粉催熟 performBonemeal：
+	绯红菌岩：
+		在上方方块位置放置“NetherFeatures.CRIMSON_FOREST_VEGETATION_BONEMEAL”	
+	诡异菌岩：
+		在上方方块位置放置“NetherFeatures.WARPED_FOREST_VEGETATION_BONEMEAL”
+		在上方方块位置放置“NetherFeatures.NETHER_SPROUTS_BONEMEAL”	
+		1/8概率：
+			在上方方块位置放置“NetherFeatures.TWISTING_VINES_BONEMEAL”
+
+下界植被放置：
+	如果：原点下方是菌岩 and 维度最低y < 原点 < 维度最高y
+	那么：尝试spreadWidth²次：
+		从原点偏移得到放置点：
+			x,z: 三角分布(0, spreadWidth)
+			y: 三角分布(0, spreadHeight)
+		从放置列表中随机选一种植被
+		如果：放置点为空气 and 放置点y > 维度最低y and 选中的植被在放置点可以存活(canSurvive)
+		那么：在放置点对选中的植被执行place
+
+下界骨粉催熟植被列表：
+	NetherFeatures.CRIMSON_FOREST_VEGETATION_BONEMEAL:
+		spreadWidth = 3, spreadHeight = 1
+		诡异菌索(85)，诡异菌(13)，绯红菌索(1)，绯红菌(1)
+
+	NetherFeatures.CRIMSON_FOREST_VEGETATION_BONEMEAL:
+		spreadWidth = 3, spreadHeight = 1
+		绯红菌索(87)，绯红菌(11)，诡异菌(1)
+	
+	NetherFeatures.NETHER_SPROUTS_BONEMEAL:
+		spreadWidth = 3, spreadHeight = 1
+		诡异菌索(85)，绯红菌索(1)，诡异菌(13)，绯红菌(1)
+		
+	NetherFeatures.NETHER_SPROUTS_BONEMEAL:
+		spreadWidth = 3, spreadHeight = 1
+		下界苗
+	
+	NetherFeatures.TWISTING_VINES_BONEMEAL:
+		spreadWidth = 3, spreadHeight = 1, maxHeight = 2
+
+		垂泪藤(Twisting Vines)的放置：
+			如果放置原点是空气：
+			那么：尝试spreadWidth²次：
+				从原点偏移得到临时点：
+					x,z: -spreadWidth ~ +spreadWidth
+					y: -spreadHeight ~ +spreadHeight
+				从临时点下方的方块开始向下寻找直到第一个非空气方块，
+				如果第一个非空气上方是空气，作为放置点(否则失败)：
+					放置高度 = 1 ~ maxHeight
+					1/6的概率使放置高度翻倍
+					1/5的概率使放置高度重置为1
+					
+					在放置点放置垂泪藤(绿色的)，根部age为17~25随机数
+

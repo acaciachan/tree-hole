@@ -1,45 +1,3 @@
-源代码(可以直接看最后的总结)：
-        this.tag(BlockTags.UNDERWATER_BONEMEALS)
-			.add(Blocks.SEAGRASS)
-			.addTag(BlockTags.CORALS)
-			.addTag(BlockTags.WALL_CORALS);
-        
-        this.tag(BlockTags.CORAL_PLANTS)
-			.add(
-				Blocks.TUBE_CORAL, 
-				Blocks.BRAIN_CORAL, 
-				Blocks.BUBBLE_CORAL, 
-				Blocks.FIRE_CORAL, 
-				Blocks.HORN_CORAL
-				);
-        this.tag(BlockTags.CORALS)
-            .addTag(BlockTags.CORAL_PLANTS)
-            .add(
-				Blocks.TUBE_CORAL_FAN, 
-				Blocks.BRAIN_CORAL_FAN, 
-				Blocks.BUBBLE_CORAL_FAN, 
-				Blocks.FIRE_CORAL_FAN, 
-				Blocks.HORN_CORAL_FAN
-				);
-				
-        this.tag(BlockTags.WALL_CORALS)
-            .add(
-				Blocks.TUBE_CORAL_WALL_FAN, 
-				Blocks.BRAIN_CORAL_WALL_FAN, 
-				Blocks.BUBBLE_CORAL_WALL_FAN, 
-				Blocks.FIRE_CORAL_WALL_FAN, 
-				Blocks.HORN_CORAL_WALL_FAN
-				);
-				
-        this.tag(BlockTags.CORAL_BLOCKS)
-            .add(
-				Blocks.TUBE_CORAL_BLOCK, 
-				Blocks.BRAIN_CORAL_BLOCK, 
-				Blocks.BUBBLE_CORAL_BLOCK, 
-				Blocks.FIRE_CORAL_BLOCK, 
-				Blocks.HORN_CORAL_BLOCK
-				);
-
 总结：
 	水下骨粉类
 		海草
@@ -47,8 +5,7 @@
 			珊瑚植物类
 				珊瑚x5
 			地上的珊瑚扇x5
-		墙上的珊瑚类x5
-
+		墙上的珊瑚扇x5
 	珊瑚块
 		珊瑚块
 
@@ -98,7 +55,7 @@
 	3. 这128次尝试，每次的随机的多次偏移，任何一次偏移后的位置如果是碰撞箱完整的方块就会导致此次尝试失败；
 	4. 每次尝试的随机偏移，水平方向游走的概率比较均衡，垂直方向留在原地的概率大；
 	5. 每次尝试都会重新回到原点开始，所以不会偏离太远
-	6. 最终可能被选到的范围为 ±7 x ±14 x ±7 = 15*29*15
+	6. 最终可能被选到的范围为15*15*15
 	7. 选中位置的点状云图应该是扁的方形
 	8. 所以如果是节省骨粉的设计，比较合理的方式是一层水的生长区域中心催熟，猜测可能一层5*5的即可
 	9. 发射器喷骨粉传递的方向为null
