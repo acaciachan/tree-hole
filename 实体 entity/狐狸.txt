@@ -1,0 +1,13 @@
+狐狸采摘：
+	当自己直线距离甜浆果方块中心小于2m，reachedTarget设置为true
+	当reachedTarget为true时，ticksWaited++
+	当ticksWaited>=40时，每次狐狸的FoxEatBerriesGoal tick时，
+		会因为满足isReachedTarget而触发onReachedTarget，触发采摘甜浆果或荧光浆果
+		
+		荧光浆果 pickGlowBerry：
+			如果洞穴藤蔓有浆果，产量=1
+				如果狐狸没有叼着东西，会从产量中抽走一个叼到嘴里
+		
+		甜浆果 pickSweetBerries：
+			age = 0~2，产量 = 1~2；age = 3，产量 = 2~3
+				如果狐狸没有叼着东西，会从产量中抽走一个叼到嘴里
