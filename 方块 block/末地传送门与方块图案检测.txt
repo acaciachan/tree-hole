@@ -1,0 +1,83 @@
+末地传送门框架的定义：
+	.aisle("?vvv?", ">???<", ">???<", ">???<", "?^^^?")
+	
+	其中：
+		?(任何方块)，v(北)，^(南)，>(西)，<(东)
+
+	映射为三维Predicate数组：
+		result[aisle][row][col] = ...
+		其中：(col(列),row(行),aisle(道)) = (x',y',z')
+
+理清关系：
+= (col(列),		row(行),		aisle(道)	)
+= (x',			y',			z'			) 
+= (right,		down,		forwards	)
+= (width,		height,		depth		)
+
+在“代码坐标系”的坐标示意图(所有方块位于y'=0)：
+	(原点位于图中的左上角问号)
+	z'\x'	01234
+	0		?vvv?
+	1		>???<
+	2		>???<
+	3		>???<
+	4 		?^^^?
+
+	z'\x'	0 1 2 3 4
+	0		原北北北任
+	1		西任任任东
+	2		西任任任东
+	3		西任任任东
+	4		任南南南任
+
+映射到世界中匹配图案：
+	局部坐标和世界坐标的映射：
+	translateAndRotate
+	world = origin + right·e_x + down·e_y + forwards·e_z
+		其中：
+			e_z = forwardsVector
+			e_y = −upVector
+			e_x = rightVector     = forwards × up
+
+			其中：
+				Vec3i forwardsVector = forwardsDirection.getStepVector();  // 局部 +z' → forwards
+				Vec3i upVector       = upDirection.getStepVector();        // 局部 +y' → up
+				Vec3i rightVector    = forwardsVector.cross(upVector);     // 局部 x'+ = forwards × up
+
+	BlockPattern类的.find()方法会穷举forwardsDirection和upDirection，并且up穷举时方向不为forwardsDirection(的-+方向)
+	一共有6x(6-2)=24中可能的性两个方向的组合
+	原版正常摆放的门，两个坐标系的关系：
+	
+		z'\x'	0 1 2 3 4			z\x		0 -1 -2 -3 -4
+		0		原北北北任			0		原北北北任
+		1		西任任任东			-1		西任任任东
+		2		西任任任东			-2		西任任任东
+		3		西任任任东			-3		西任任任东
+		4		任南南南任			-4		任南南南任
+
+	可以看到，代码坐标系中的原点在，匹配到现实世界中的门其实是在门的东南角。
+	
+末地传送门和末影之眼：
+
+每次把末影之眼塞入末地传送门框 (useOn)：
+	检测门：
+		检测区域：
+			把放置眼睛的门坐标作为检测区区域的原点，然后三个轴往正方向都扩展(width,height,depth)
+			形成一个正方形的检测区域，对于传送门的代码形状为宽高深三维为5x1x5
+			那么检测区域就是一个5x5x5的正方形区域
+		检测逻辑：
+			遍历6个forwardsDirection：
+				遍历6个upDirection(去除与forwardsDirection平行的两个方向)：
+					以“zyx，小到大的字典顺序”，遍历所有检测区域内的点：
+						
+						如果：
+							代码坐标系的原点放在世界坐标系的当前检测点，
+							此时的 代码坐标系 和 世界坐标系 完全匹配
+						那么：停止查找，查找的匹配信息放在存入match变量里
+	
+	如果 match不为空(找到了匹配的门)：
+		pos = match里存的frontTopLeft(代码坐标系的原点在世界坐标系匹配成功时的坐标)
+		遍历 pos.offset(-3, 0, -3) 到 pos.offset(-1, 0, -1)的3x3区域：
+			按照xz，负到正的字典顺序
+			破坏已有方块并放置“末地传送门(本体)”
+		在 pos.offset(+1, 0, +1) 触发全局事件(末地传送门开启)
