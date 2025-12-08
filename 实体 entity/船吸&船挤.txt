@@ -20,11 +20,32 @@
 					水生环境类：各种桶装生物
 					水生动物：海豚、鱿鱼、发光鱿鱼、鹦鹉螺、僵尸鹦鹉螺
 			
-			那么：实体尝试执行上船
-				注意：船额外要求船的视线不在水里，否则执行过程中就会失败，最后的表现就是既不船吸，又不船挤
-				船的视线在水里的判据为：pos.getY() + fluidState.getHeight(pos) > this.position.y + this.eyeHeight = this.position.y + 0.5625
-				简而言之，视线不再水里要求眼睛高度>=水位高度
-				当船在水下顶着某个方块底部时，刚好处于船的视线不在水里的状态	
+			那么：此实体.startRiding(此船)：
+				如果：
+					此船.vehicle != 此船 & 循环检测
+					and 此船.couldAcceptPassenger() # 一般为true，两个特例Marker和OminousItemSpawner返回fasle
+					and 此船.type.canSerialize() # 一般为true？
+					and 此船.的载具的载具的...的载具 != 此实体 # 防止骑乘关系中出现循环引用（骑乘环）
+					and (此实体.canRide(船) and 船.canAddPassenger(此实体))
+					其中：
+						实体.canRide(载具)：
+							一般实体：!this.isShiftKeyDown() && this.boardingCooldown <= 0 # 除了玩家，别的实体下车有60tick的冷却
+							凋零、坚守者、末影龙：return false # 三大BOSS不能骑乘载具
+							海豚：return true # 海豚无视骑乘冷却
+						载具.canAddPassenger(实体)：
+							一般实体：无乘客
+							骆驼、乐魂：未满员
+							船类：未满员 and 船的视线不在水里(眼睛高度(船顶部) >= 眼睛处的水的水位高度)
+							炽足兽：无乘客 and 炽足兽的视线不在岩浆里(眼睛高度(0.85x身高) >= 眼睛处的岩浆的液位高度)
+							Marker和OminousItemSpawner：fasle
+				那么：
+					如果：此实体.isPassenger()，那么：此实体.stopRiding()
+					# 走到这一步就是成功骑乘了
+					此实体.vehicle = 此船
+					此实体.vehicle.addPassenger(此实体)
+					# 通知玩家...
+					return true
+				否则：return false
 			否则：尝试推挤实体(需要满足相对高度要求)：
 				对方不是船：自己底部 >= 对方底部  # 常用船挤条件
 				对方是船：自己顶部 > 对方底部
