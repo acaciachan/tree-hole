@@ -1,0 +1,12 @@
+12x12 chunks 16 heights
+	full space 19.3w/h 64x64-4*16=4032 boats (with turtle egg hole)
+	full space - 4corner 19.2w/h 64x64-4*16-5*5*4=3932 boats (with turtle egg hole)
+	1/2 space 10w/h 64*32=2048 boats
+	1/3 space 7w/h 21x64=1344 boats
+	(3*3)/(5*5) space 7.4w/h 38x38=1444 boats
+
+12x9 chunks 16 heights
+	full space 15w/h 64x48=3072 boats
+
+full spawn range 16height
+	full space 20.5w/h 64x64+(5x5)x(6x4)-4*16=4632boats (with turtle egg hole, mobcap limit)
