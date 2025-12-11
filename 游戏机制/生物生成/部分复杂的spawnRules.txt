@@ -24,9 +24,8 @@
 				如果：此处群系有“BiomeTags.MORE_FREQUENT_DROWNED_SPAWNS”(河流或冻河) 
 				那么：1/15概率
 				否则：1/40概率 and (此处y < 海平面-5)
-			否则：失败
 
-		增援：非和平 and 越暗越好 and 下方含水 and 此处含水 
+		增援：非和平 and 越暗越好 and 下方含水 and 此处含水
 		刷怪笼：非和平 and 越暗越好
 		试炼刷怪笼：非和平
 	
