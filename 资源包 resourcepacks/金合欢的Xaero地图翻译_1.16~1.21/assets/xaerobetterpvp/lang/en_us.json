@@ -1,4 +1,5 @@
 {
+	"key.category.xaerobetterpvp.controls" : "Better PVP",
 	"gui.xaero_armour_status_settings" : "Armor Status Settings",
 	"gui.xaero_armour_status" : "Armor Status",
 	"gui.xaero_notifications" : "Notifications",
@@ -76,5 +77,5 @@
 	"gui.xaero_held_centered_position" : "Held Items When Centered",
 	"gui.xaero_held_centered_position_screen_edges" : "Edges",
 	"gui.xaero_held_centered_position_hotbar" : "Hotbar",
-	"key.category.xaerobetterpvp.controls" : "Better PVP"
+	"gui.xaero_better_pvp_server_profiles" : "Better PVP Server Settings"
 }
