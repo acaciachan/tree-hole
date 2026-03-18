@@ -68,7 +68,7 @@ with pd.ExcelWriter("biome.xlsx") as writer:
         if df.empty:
             continue
         df = df.reset_index().rename(columns={"index": "群系"})
-        # 确保“群系”和“总权重”在前两列；其余按字母 or 出现顺序排（pandas 默认是按 key 插入顺序，Python 3.7+ 有序）
+        # 确保“群系”和“总权重”在前两列；其余按字母 or 出现顺序排
         cols = ["群系", "总权重"] + [c for c in df.columns if c not in ("群系", "总权重")]
         df = df[cols]
         df.to_excel(writer, sheet_name=category, index=False)
