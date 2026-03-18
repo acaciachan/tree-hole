@@ -9,7 +9,7 @@ output_zero_total_weight = True  # 是否显示没有任何刻生成生物的生
 categories = ["monster", "creature", "ambient", "water_ambient",
               "water_creature", "underground_water_creature", "axolotls", "misc"]
 
-# 改为：每个 category → biome → spawner_type → list of display strings
+# 每个 category → biome → spawner_type → list of display strings
 data = {category: defaultdict(lambda: defaultdict(list)) for category in categories}
 
 folder_path = "./biome"
@@ -44,7 +44,7 @@ for filename in os.listdir(folder_path):
                     else:
                         display_value = f"{weight_value}"
 
-                    # 关键改动：追加到列表而非覆盖
+                    # 追加到列表而非覆盖
                     data[category][biome_name][spawner_type].append(display_value)
                     total_weight += weight
 
