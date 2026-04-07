@@ -1,0 +1,9 @@
+{
+    "pack": {
+        "description": "汉化 by §6金合欢酱(acaciachan)§7",
+		"pack_format": 34,
+        "supported_formats": [4, 1024],
+		"min_format": 4,
+        "max_format": 1024
+    }
+}

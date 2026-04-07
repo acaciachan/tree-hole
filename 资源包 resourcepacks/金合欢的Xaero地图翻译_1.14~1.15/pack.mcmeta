@@ -1,7 +1,9 @@
 {
     "pack": {
-        "pack_format": 33,
-        "description": "§l汉化 §rby §9DeepSeek-R1 §r& §6金合欢酱(acaciachan)",
-        "supported_formats": [33, 1024]
+        "description": "汉化 by §6金合欢酱(acaciachan)§7\nMinimap_21.10.0.4\nWorldMap_1.14.1",
+		"pack_format": 5,
+        "supported_formats": [4, 1024],
+		"min_format": 4,
+        "max_format": 1024
     }
 }
