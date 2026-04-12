@@ -1,0 +1,2 @@
+xaerominimap-fabric-1.21.11-25.3.10.jar
+xaeroworldmap-fabric-1.21.11-1.40.11.jar

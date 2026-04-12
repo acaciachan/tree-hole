@@ -17,8 +17,8 @@
 		3. 	铁栏杆、玻璃板 (IronBarsBlock)
 		4. 	此侧面支撑形状完整 (isFaceSturdy)
 			并且 不是禁止连接的方块(isExceptionForConnection)：
-			树叶类、潜影盒类、屏障
-			西瓜、南瓜、雕刻南瓜、南瓜灯
+				树叶类、潜影盒类、屏障
+				西瓜、南瓜、雕刻南瓜、南瓜灯
 
 	侧面连接高矮：
 		如果：上方方块底部支撑形状含有 TEST_SHAPES_WALL 的形状
