@@ -67,3 +67,9 @@
 /cenchant minecraft:mace with minecraft:density 5 with minecraft:unbreaking 3
 破甲4 + 耐久3（缺：风暴3 + 火焰附加2）
 /cenchant minecraft:mace with minecraft:breach 4 with minecraft:unbreaking 3
+
+【矛】
+突进3 + 锋利4 + 击退2 + 抢夺3 + 耐久3（缺：锋利5 + 火焰附加2）
+/cenchant minecraft:diamond_spear with minecraft:lunge 3 with minecraft:knockback 2 with minecraft:looting 3 with minecraft:unbreaking 3 with minecraft:sharpness 4
+突进3 + 亡灵4 + 击退2 + 抢夺3 + 耐久3（缺：亡灵5 + 火焰附加2）
+/cenchant minecraft:diamond_spear with minecraft:lunge 3 with minecraft:knockback 2 with minecraft:looting 3 with minecraft:unbreaking 3 with minecraft:smite 4

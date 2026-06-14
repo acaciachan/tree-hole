@@ -1,4 +1,5 @@
 {
+    "servux.command.about": "§dServux: %s§r",
     "servux.command.config.invalid_language": "无效语言：%s",
     "servux.command.config.list.data_provider": "数据提供者 %s 包含以下设置：",
     "servux.command.config.reloaded": "配置已重载！",

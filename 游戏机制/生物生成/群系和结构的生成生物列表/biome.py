@@ -4,7 +4,7 @@ import pandas as pd
 from collections import defaultdict
 
 output_count = True  # 是否显示成组生成数量范围
-output_zero_total_weight = False  # 是否显示没有任何刻生成生物的生物类别和生物群系
+output_zero_total_weight = True  # 是否显示没有任何刻生成生物的生物类别和生物群系
 
 categories = ["monster", "creature", "ambient", "water_ambient",
               "water_creature", "underground_water_creature", "axolotls", "misc"]
@@ -12,20 +12,20 @@ categories = ["monster", "creature", "ambient", "water_ambient",
 # 每个 category → biome → spawner_type → list of display strings
 data = {category: defaultdict(lambda: defaultdict(list)) for category in categories}
 
-folder_path = "./structure"
+folder_path = "./biome"
 for filename in os.listdir(folder_path):
     if filename.endswith(".json"):
         file_path = os.path.join(folder_path, filename)
         with open(file_path, 'r') as file:
             json_data = json.load(file)
-            spawn_overrides = json_data.get("spawn_overrides", {})
-            structure_name = filename.split('.')[0]
+            spawners = json_data.get("spawners", {})
+            biome_name = filename.split('.')[0]
 
             for category in categories:
                 total_weight = 0
-                spawn_info = spawn_overrides.get(category, {})
+                spawner_entries = spawners.get(category, [])
                 # 遍历每个 spawner 实例（可能同 type 多次出现）
-                for spawner in spawn_info.get("spawns", []):
+                for spawner in spawner_entries:
                     spawner_type = spawner["type"].split(":")[-1]
                     weight = spawner["weight"]
                     min_count = spawner["minCount"]
@@ -45,37 +45,42 @@ for filename in os.listdir(folder_path):
                         display_value = f"{weight_value}"
 
                     # 追加到列表而非覆盖
-                    data[category][structure_name][spawner_type].append(display_value)
+                    data[category][biome_name][spawner_type].append(display_value)
                     total_weight += weight
 
                 # 合并同一 spawner_type 的多个条目，用 "; " 连接
-                for spawner_type in list(data[category][structure_name].keys()):
-                    entries = data[category][structure_name][spawner_type]
-                    data[category][structure_name][spawner_type] = "; ".join(entries)
+                for spawner_type in list(data[category][biome_name].keys()):
+                    entries = data[category][biome_name][spawner_type]
+                    data[category][biome_name][spawner_type] = "; ".join(entries)
 
-                # 总权重保持数字（按所有条目累加）
+                # 总权重保持纯数字（仍按所有条目累加）
                 if output_zero_total_weight or total_weight > 0:
-                    data[category][structure_name]["总权重"] = total_weight
+                    data[category][biome_name]["总权重"] = total_weight
 
 # 构建 DataFrame：每个 category 一张表
-with pd.ExcelWriter("structure.xlsx") as writer:
+with pd.ExcelWriter("biome.xlsx") as writer:
     for category in categories:
-        df = pd.DataFrame(data[category]).T
+        raw_dict = data[category]
+        if not raw_dict:
+            continue
+        df = pd.DataFrame(raw_dict).T
         df = df.dropna(how='all', axis=0)
         if df.empty:
             continue
-        df = df.reset_index().rename(columns={"index": "结构"})
+        df = df.reset_index().rename(columns={"index": "群系"})
         # 确保“群系”和“总权重”在前两列；其余按字母 or 出现顺序排
-        cols = ["结构", "总权重"] + [c for c in df.columns if c not in ("结构", "总权重")]
+        cols = ["群系", "总权重"] + [c for c in df.columns if c not in ("群系", "总权重")]
         df = df[cols]
         df.to_excel(writer, sheet_name=category, index=False)
 
         worksheet = writer.sheets[category]
         for col_num, col_name in enumerate(df.columns):
-            if col_name == "结构" or col_name == "总权重":
+            if col_name == "群系":
                 worksheet.set_column(col_num, col_num, 20)
+            elif col_name == "总权重":
+                worksheet.set_column(col_num, col_num, 5)
             else:
-                worksheet.set_column(col_num, col_num, 15)  # 稍宽，适配分号内容
+                worksheet.set_column(col_num, col_num, 10)
         worksheet.freeze_panes(1, 2)
 
-print("Excel文件已生成：structure.xlsx")
+print("Excel文件已生成：biome.xlsx")
