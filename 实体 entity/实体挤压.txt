@@ -1,0 +1,11 @@
+push
+	xa = entity.getX() - this.getX()
+	za = 同上
+
+	dd = max(abs(xa),abs(za))   两个实体的切比雪夫距离
+	如果 dd < 0.01：距离过近不挤压
+	如果 dd >= 0.01：可以挤压
+		pow = min(1/√dd, 1) # 挤压力量最大为1
+		vx = xa/dd * 0.05pow # 先除以距离归一化方向，再x0.05pow
+		vz = 同上
+		应用速度
