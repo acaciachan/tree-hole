@@ -1,9 +1,9 @@
-https://translate.sakuraryoko.com/download/itemscroller/26-2/zh_Hans/
-https://translate.sakuraryoko.com/download/litematica/26-2/zh_Hans/
-https://translate.sakuraryoko.com/download/litematica-printer/26-2/zh_Hans/
-https://translate.sakuraryoko.com/download/malilib/26-2/zh_Hans/
-https://translate.sakuraryoko.com/download/minihud/26-2/zh_Hans/
-https://translate.sakuraryoko.com/download/servux/26-2/zh_Hans/
-https://translate.sakuraryoko.com/download/syncmatica/26-2/zh_Hans/
-https://translate.sakuraryoko.com/download/tweakeroo/26-2/zh_Hans/
+https://translate.sakuraryoko.com/download/itemscroller/main/zh_Hans/
+https://translate.sakuraryoko.com/download/litematica/main/zh_Hans/
+https://translate.sakuraryoko.com/download/litematica-printer/main/zh_Hans/
+https://translate.sakuraryoko.com/download/malilib/main/zh_Hans/
+https://translate.sakuraryoko.com/download/minihud/main/zh_Hans/
+https://translate.sakuraryoko.com/download/servux/main/zh_Hans/
+https://translate.sakuraryoko.com/download/syncmatica/main/zh_Hans/
+https://translate.sakuraryoko.com/download/tweakeroo/main/zh_Hans/
 https://translate.sakuraryoko.com/download/vkm/multi/zh_Hans/
